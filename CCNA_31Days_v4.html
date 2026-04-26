@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCNA 200-301 — 31 Days + Labs (Allan Johnson 2nd Ed.)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;--border2:#484f58;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--blue:#2f81f7;--blue-dim:#1f4a8a;--blue-bg:#0d2044;--green:#3fb950;--green-bg:#0d2e17;--green-dim:#1a4a28;--red:#f85149;--red-bg:#2d0f0e;--amber:#d29922;--amber-bg:#2d1f00;--amber-dim:#5a3e00;--teal:#39d0d8;--purple:#a371f7;--purple-bg:#1e1040;--radius:8px;--radius-lg:12px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:1.25rem 1rem;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;}
+.logo h1{font-size:14px;font-weight:600;}
+.logo p{font-size:11px;color:var(--text2);margin-top:2px;}
+.logo small{font-size:10px;color:var(--text3);font-style:italic;}
+.badge{display:inline-block;margin-top:5px;background:var(--blue-dim);color:var(--blue);font-size:10px;padding:2px 8px;border-radius:999px;font-family:'JetBrains Mono',monospace;}
+.stats-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;}
+.sr{display:flex;justify-content:space-between;margin-bottom:4px;}
+.sr:last-child{margin-bottom:0;}
+.sr span:first-child{font-size:11px;color:var(--text2);}
+.sr span:last-child{font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace;}
+.pw{background:var(--border);border-radius:999px;height:3px;margin-top:7px;}
+.pf{height:3px;border-radius:999px;background:var(--green);transition:width .4s;}
+.nl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.nav{display:flex;flex-direction:column;gap:2px;}
+.nb{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius);background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;transition:background .12s,color .12s;text-align:left;width:100%;}
+.nb:hover{background:var(--bg3);color:var(--text);}
+.nb.active{background:var(--blue-bg);color:var(--blue);}
+.sfoot{margin-top:auto;font-size:10px;color:var(--text3);line-height:1.7;}
+.main{padding:2rem;overflow-y:auto;}
+.page{display:none;}.page.active{display:block;}
+.ph{margin-bottom:1.5rem;}
+.ph h2{font-size:19px;font-weight:600;}
+.ph p{font-size:13px;color:var(--text2);margin-top:4px;}
+.legend{display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+.ld{width:10px;height:10px;border-radius:2px;border:1px solid;}
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:7px;margin-bottom:1.5rem;}
+.dc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 5px;cursor:pointer;text-align:center;transition:border-color .12s,background .12s;}
+.dc:hover{border-color:var(--border2);background:var(--bg3);}
+.dc.done{background:var(--green-bg);border-color:var(--green-dim);}
+.dc.done .dn{color:var(--green);}
+.dc.sel{border-color:var(--blue);background:var(--blue-bg);}
+.dc.sel .dn{color:var(--blue);}
+.dic{font-size:14px;margin-bottom:3px;}
+.dn{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.dt{font-size:9px;color:var(--text2);margin-top:2px;line-height:1.4;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;}
+#detail{display:none;}
+.dtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.dtitle{font-size:15px;font-weight:600;}
+.dsub{font-size:11px;color:var(--text2);margin-top:3px;}
+.pill{font-size:10px;padding:3px 10px;border-radius:999px;border:1px solid;white-space:nowrap;}
+.pill.yes{background:var(--green-bg);color:var(--green);border-color:var(--green-dim);}
+.pill.no{background:var(--bg3);color:var(--text3);border-color:var(--border);}
+.dtabs{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.dtab{padding:5px 12px;font-size:11px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;font-family:'Sora',sans-serif;transition:background .12s,color .12s;}
+.dtab:hover{background:var(--bg3);color:var(--text);}
+.dtab.active{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-dim);}
+.dpanel{display:none;}.dpanel.show{display:block;}
+.stl{list-style:none;}
+.stl li{font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:9px;color:var(--text);line-height:1.5;}
+.stl li:last-child{border-bottom:none;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px;}
+.ex-block h4{font-size:12px;font-weight:500;color:var(--amber);margin-bottom:12px;}
+.ex-q{font-size:13px;color:var(--text);line-height:1.6;margin-bottom:8px;}
+.ex-q strong{color:var(--blue);}
+.ex-pre{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text2);white-space:pre-wrap;margin-bottom:8px;}
+.ex-input{width:100%;padding:8px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:12px;font-family:'JetBrains Mono',monospace;resize:vertical;min-height:52px;}
+.ex-input:focus{outline:none;border-color:var(--blue);}
+.ex-ans{margin-top:8px;padding:10px 13px;border-radius:var(--radius);font-size:12px;line-height:1.8;background:var(--bg3);border:1px solid var(--border);display:none;font-family:'JetBrains Mono',monospace;color:var(--teal);white-space:pre-wrap;}
+.ex-item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.ex-item:last-child{border-bottom:none;margin-bottom:0;}
+.ex-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.lab-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;}
+.lab-title{font-size:13px;font-weight:500;color:var(--purple);margin-bottom:6px;}
+.lab-obj{font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6;}
+.lab-topo{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2);background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;margin-bottom:10px;white-space:pre;overflow-x:auto;line-height:1.8;}
+.lab-step-title{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px;}
+.cmd-block{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;color:var(--blue);line-height:1.9;white-space:pre-wrap;overflow-x:auto;}
+.lab-verify{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--green-bg);border:1px solid var(--green-dim);border-radius:var(--radius);padding:10px 12px;color:var(--green);line-height:1.8;white-space:pre-wrap;margin-top:10px;}
+.lb-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:999px;margin-left:6px;border:1px solid;}
+.lb-pt{background:var(--purple-bg);color:var(--purple);border-color:#3a1c7a;}
+.lb-cli{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-dim);}
+.btn{padding:6px 13px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text2);cursor:pointer;font-family:'Sora',sans-serif;transition:background .12s,color .12s;}
+.btn:hover{background:var(--bg3);color:var(--text);}
+.btn-ok{background:var(--green-bg);color:var(--green);border-color:var(--green-dim);}
+.btn-ok:hover{background:var(--green);color:#0d1117;}
+.btn-blue{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-dim);}
+.btn-blue:hover{background:var(--blue);color:#fff;}
+.btn-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-dim);}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.qwrap{max-width:680px;}
+.qctr{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-bottom:6px;}
+.qtxt{font-size:14px;font-weight:500;line-height:1.6;margin-bottom:1rem;}
+.qopts{display:flex;flex-direction:column;gap:7px;}
+.qopt{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-size:13px;cursor:pointer;text-align:left;font-family:'Sora',sans-serif;line-height:1.5;transition:border-color .12s,background .12s;}
+.qopt:hover:not(:disabled){border-color:var(--border2);background:var(--bg3);}
+.qopt.correct{border-color:var(--green);background:var(--green-bg);color:var(--green);}
+.qopt.wrong{border-color:var(--red);background:var(--red-bg);color:var(--red);}
+.qopt:disabled{cursor:default;}
+.fb{margin-top:12px;padding:10px 14px;border-radius:var(--radius);font-size:13px;line-height:1.6;}
+.fb.ok{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim);}
+.fb.ko{background:var(--red-bg);color:var(--red);border:1px solid #5a1a19;}
+.score-end{text-align:center;padding:2rem 1rem;}
+.score-big{font-size:52px;font-weight:600;font-family:'JetBrains Mono',monospace;}
+.rtitle{font-size:13px;font-weight:500;color:var(--teal);margin-bottom:8px;}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.9;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;color:var(--text2);white-space:pre-wrap;}
+.hl{color:var(--blue);}.hl2{color:var(--green);}.hl3{color:var(--amber);}.hl4{color:var(--red);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(max-width:680px){.app{grid-template-columns:1fr;}.sidebar{position:static;height:auto;}.main{padding:1rem;}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">
+    <h1>CCNA 200-301</h1>
+    <p>31 Days Before Your Exam</p>
+    <small>Allan Johnson — 2ème éd. (2024)</small><br>
+    <span class="badge">v4 · Labs &amp; Exercices</span>
+  </div>
+  <div class="stats-box">
+    <div class="sr"><span>Jours terminés</span><span id="s-done">0/31</span></div>
+    <div class="sr"><span>Score quiz</span><span id="s-score">—</span></div>
+    <div class="pw"><div class="pf" id="pf" style="width:0%"></div></div>
+  </div>
+  <div>
+    <div class="nl">Navigation</div>
+    <div class="nav">
+      <button class="nb active" onclick="goPage('plan')" id="nav-plan">📅 Plan du livre</button>
+      <button class="nb" onclick="goPage('labs')" id="nav-labs">🧪 Tous les Labs</button>
+      <button class="nb" onclick="goPage('quiz')" id="nav-quiz">🎯 Quiz CCNA</button>
+      <button class="nb" onclick="goPage('review')" id="nav-review">📋 Aide-mémoire</button>
+    </div>
+  </div>
+  <div class="sfoot">Progression sauvegardée<br>automatiquement.</div>
+</aside>
+<main class="main">
+  <div class="page active" id="page-plan">
+    <div class="ph"><h2>Plan d'étude — 31 jours</h2><p>Table des matières officielle · Cliquez un jour → Théorie + Exercice + Lab</p></div>
+    <div class="legend">
+      <span class="li"><span class="ld" style="background:var(--green-bg);border-color:var(--green-dim)"></span>Terminé</span>
+      <span class="li"><span class="ld" style="background:var(--blue-bg);border-color:var(--blue)"></span>Sélectionné</span>
+      <span class="li"><span class="ld" style="background:var(--bg2);border-color:var(--border)"></span>À faire</span>
+    </div>
+    <div class="day-grid" id="day-grid"></div>
+    <div class="card" id="detail">
+      <div class="dtop">
+        <div><div class="dtitle" id="d-title"></div><div class="dsub">Table des matières officielle</div></div>
+        <div id="d-pill"></div>
+      </div>
+      <div class="dtabs">
+        <button class="dtab active" id="tab-sub" onclick="switchTab('sub')">📖 Théorie</button>
+        <button class="dtab" id="tab-ex" onclick="switchTab('ex')">✏️ Exercices</button>
+        <button class="dtab" id="tab-lab" onclick="switchTab('lab')">🧪 Lab</button>
+      </div>
+      <div id="panel-sub" class="dpanel show"></div>
+      <div id="panel-ex" class="dpanel"></div>
+      <div id="panel-lab" class="dpanel"></div>
+      <div class="actions" id="d-actions"></div>
+    </div>
+  </div>
+  <div class="page" id="page-labs">
+    <div class="ph"><h2>Tous les Labs</h2><p>31 labs Packet Tracer / CLI — un par jour du livre</p></div>
+    <div id="all-labs"></div>
+  </div>
+  <div class="page" id="page-quiz">
+    <div class="ph"><h2>Quiz CCNA 200-301</h2><p>Questions alignées sur les 31 jours · avec explications</p></div>
+    <div class="card qwrap" id="quiz-box"></div>
+  </div>
+  <div class="page" id="page-review">
+    <div class="ph"><h2>Aide-mémoire</h2><p>Formules, tables et mnémotechniques</p></div>
+    <div id="review-body"></div>
+  </div>
+</main>
+</div>
+<script>
+// ═══════════════ DONNÉES 31 JOURS ═══════════════
+const days = [
+{d:31,topic:"Networking Models, Devices, and Components",ic:"🌐",
+ sub:["OSI et TCP/IP Models (7 couches vs 4 couches)","PDU : Bit / Trame / Paquet / Segment / Data","Appareils réseau : Switch, Router, Firewall, AP, WLC, IDS/IPS","Physical Layer et câblage UTP (Cat5e, Cat6)","LANs, WANs, SOHO","Topologies physiques et logiques","Hierarchical Campus Design (Core/Distribution/Access)"],
+ ex:[
+  {q:"Listez les 7 couches OSI (7→1) et leur PDU correspondante.",ans:"7-Application: Data\n6-Présentation: Data\n5-Session: Data\n4-Transport: Segment\n3-Réseau: Paquet\n2-Data Link: Trame (Frame)\n1-Physical: Bit\nMnémo: All People Seem To Need Data Processing"},
+  {q:"Quelle est la différence entre une adresse MAC et une adresse IP ?\nDonnez la couche OSI de chacune.",ans:"Adresse MAC : couche 2 (Data Link)\n- 48 bits, hexadécimal (ex: AA:BB:CC:DD:EE:FF)\n- Identifie l'interface physique\n- Locale au réseau (LAN)\n\nAdresse IP : couche 3 (Network)\n- IPv4: 32 bits (ex: 192.168.1.1)\n- Identifie l'hôte sur un réseau logique\n- Routable à travers Internet"}
+ ],
+ lab:{title:"Lab — Identification des PDUs (Mode Simulation)",badge:"pt",
+  obj:"Observer l'encapsulation/désencapsulation à chaque couche OSI avec Packet Tracer Simulation Mode.",
+  topo:"[PC1 192.168.1.10]──[Switch S1]──[Router R1]──[PC2 192.168.2.10]",
+  steps:[
+   {t:"Étape 1 — Construire la topologie",cmds:"1. Ouvrir Packet Tracer → New\n2. Ajouter : 2x PC-PT, 1x Switch 2960, 1x Router 1941\n3. Relier PC1 → S1 (câble droit)\n4. Relier S1 → R1 Gi0/0 (câble droit)\n5. Relier PC2 → R1 Gi0/1 (câble droit)\n6. Configurer les IPs :\n   PC1 : 192.168.1.10/24, GW 192.168.1.1\n   PC2 : 192.168.2.10/24, GW 192.168.2.1\n   R1 Gi0/0 : 192.168.1.1/24\n   R1 Gi0/1 : 192.168.2.1/24"},
+   {t:"Étape 2 — Mode Simulation",cmds:"1. Cliquer Simulation (bas droit) → Event List\n2. Filtrer : ICMP seulement\n3. PC1 → Desktop → Command Prompt\n   ping 192.168.2.10\n4. Cliquer sur chaque enveloppe PDU\n5. Observer : In Layers / Out Layers\n   → Quelles couches sont ajoutées sur chaque appareil ?"}
+  ],
+  verify:"✓ Switch : traite couches 1 et 2 uniquement (Ethernet)\n✓ Router : traite couches 1, 2 et 3 (IP)\n✓ PC : traite toutes les couches 1 à 7\n✓ Ping réussi : 4 Reply from 192.168.2.10"}
+},
+{d:30,topic:"Ethernet Switching",ic:"🔌",
+ sub:["Switching Logic (CAM Table)","Collision vs Broadcast Domains","Frame Forwarding (Store-and-forward / Cut-through)","Ethernet 802.3 (FastEth, GigEth, 10GigEth)","Ethernet Framing et adressage MAC","UTP cabling et catégories"],
+ ex:[
+  {q:"Un switch reçoit une trame avec une MAC destination inconnue.\nQue fait-il ? Pourquoi ?",ans:"Il FLOOD la trame sur TOUS les ports sauf celui de réception.\nC'est un 'Unknown Unicast Flood'.\n\nPourquoi ? Le switch ne trouve pas la MAC destination\ndans sa CAM table → il envoie partout pour être sûr\nque la destination reçoive la trame.\nQuand la destination répondra, le switch apprendra\nsa MAC et l'associera au bon port."},
+  {q:"Quelle est la différence entre un Hub et un Switch ?\nImpact sur les domaines de collision et broadcast ?",ans:"HUB (couche 1) :\n- Envoie à TOUS les ports (broadcast physique)\n- 1 seul domaine de collision pour tous les ports\n- 1 domaine de broadcast\n- Obsolète\n\nSWITCH (couche 2) :\n- Envoie seulement au bon port (unicast intelligent)\n- 1 domaine de collision PAR PORT (full-duplex)\n- 1 seul domaine de broadcast (sauf VLANs)\n- Standard actuel"}
+ ],
+ lab:{title:"Lab — Observer la table CAM",badge:"cli",
+  obj:"Observer comment le switch apprend les MACs et peuple sa CAM table.",
+  topo:"[PC1 AA:AA]──Fa0/1\n[PC2 BB:BB]──Fa0/2  [Switch S1]\n[PC3 CC:CC]──Fa0/3",
+  steps:[
+   {t:"Étape 1 — Vérifier avant les pings",cmds:"S1# show mac address-table\n! Table doit être vide ou partielle"},
+   {t:"Étape 2 — Générer du trafic puis revérifier",cmds:"! Depuis PC1 : ping 192.168.1.2 (PC2)\n! Depuis PC2 : ping 192.168.1.3 (PC3)\n\nS1# show mac address-table\nS1# show mac address-table count\nS1# show mac address-table aging-time"}
+  ],
+  verify:"✓ Avant ping : table vide\n✓ Après ping : MACs visibles avec leurs ports\n✓ Aging time par défaut : 300 secondes\n✓ show mac address-table dynamic → entrées dynamiques"}
+},
+{d:29,topic:"Switch Configuration Basics",ic:"⚙️",
+ sub:["Modes IOS : User / Privileged / Global Config / Interface","Commandes de base : hostname, enable secret, line console/vty","Half/Full Duplex et Port Speed","Vérification : show interfaces, show version","Troubleshoot interface et câble issues"],
+ ex:[
+  {q:"Quelle est la différence entre 'enable password' et 'enable secret' ?\nLequel utiliser et pourquoi ?",ans:"enable password : mot de passe en clair dans la config\n(ou chiffrement faible type 7)\n→ Ne plus utiliser, vulnérable\n\nenable secret : chiffrement MD5 irréversible\n→ Toujours utiliser enable secret\n\nSi les deux existent : enable secret a la priorité.\nservice password-encryption chiffre les autres MDP (type 7)\nmais n'est pas suffisant seul."},
+  {q:"Complétez la séquence pour configurer le VLAN de mgmt (VLAN 1)\navec IP 192.168.1.10/24 et gateway 192.168.1.1 :",ans:"Switch> enable\nSwitch# configure terminal\nSwitch(config)# hostname S1\nS1(config)# interface vlan 1\nS1(config-if)# ip address 192.168.1.10 255.255.255.0\nS1(config-if)# no shutdown\nS1(config-if)# exit\nS1(config)# ip default-gateway 192.168.1.1\nS1# copy running-config startup-config"}
+ ],
+ lab:{title:"Lab — Configuration complète d'un switch",badge:"cli",
+  obj:"Configurer un switch avec sécurité, management IP et SSH.",
+  topo:"[PC Admin 192.168.1.5]──Fa0/1──[Switch S1]\nIP mgmt : 192.168.1.10/24",
+  steps:[
+   {t:"Sécurité de base",cmds:"Switch> enable\nSwitch# configure terminal\nSwitch(config)# hostname S1\nSwitch(config)# no ip domain-lookup\nS1(config)# enable secret Cisco@2024\nS1(config)# line console 0\nS1(config-line)# password ConPass\nS1(config-line)# login\nS1(config-line)# logging synchronous\nS1(config-line)# exec-timeout 5 0\nS1(config-line)# exit\nS1(config)# service password-encryption"},
+   {t:"Management IP + SSH",cmds:"S1(config)# interface vlan 1\nS1(config-if)# ip address 192.168.1.10 255.255.255.0\nS1(config-if)# no shutdown\nS1(config-if)# exit\nS1(config)# ip default-gateway 192.168.1.1\nS1(config)# ip domain-name lab.local\nS1(config)# crypto key generate rsa modulus 1024\nS1(config)# username admin privilege 15 secret Admin@2024\nS1(config)# line vty 0 15\nS1(config-line)# transport input ssh\nS1(config-line)# login local\nS1# copy running-config startup-config"}
+  ],
+  verify:"✓ show interfaces vlan 1 → IP 192.168.1.10, up/up\n✓ show ip ssh → SSH version 2.0 enabled\n✓ SSH depuis PC : ssh -l admin 192.168.1.10\n✓ Telnet refusé (transport input ssh seulement)"}
+},
+{d:28,topic:"IPv4 Addressing",ic:"🔢",
+ sub:["Classes d'adresses (A, B, C, D, E)","Adresses privées RFC 1918","Subnetting en 4 étapes","VLSM (Variable Length Subnet Masking)","Calcul : hosts, broadcast, plage d'adresses"],
+ ex:[
+  {q:"Réseau 172.16.5.0/26 :\n→ Masque ? Wildcard ? Broadcast ?\n→ Hôtes utilisables ?\n→ 1ère et dernière adresse hôte ?",ans:"Masque     : 255.255.255.192\nWildcard   : 0.0.0.63\nBroadcast  : 172.16.5.63\nHôtes      : 62 (2^6 - 2)\nPremier    : 172.16.5.1\nDernier    : 172.16.5.62"},
+  {q:"VLSM sur 192.168.10.0/24 :\nRéseau A : 100 hôtes\nRéseau B :  50 hôtes\nRéseau C :  25 hôtes\nLien WAN :   2 hôtes\nAllouez les sous-réseaux (du plus grand au plus petit).",ans:"Réseau A : 192.168.10.0/25    (126 hôtes, .0→.127)\nRéseau B : 192.168.10.128/26  (62 hôtes, .128→.191)\nRéseau C : 192.168.10.192/27  (30 hôtes, .192→.223)\nLien WAN : 192.168.10.224/30  (2 hôtes,  .224→.227)"}
+ ],
+ lab:{title:"Lab — Subnetting et configuration IP",badge:"pt",
+  obj:"Subdiviser 192.168.1.0/24 et configurer le routage entre sous-réseaux.",
+  topo:"[PC1 .10/26]──[S1]──Gi0/0[R1]Gi0/1──[S2]──[PC2 .65/27]\n              192.168.1.0/26        192.168.1.64/27",
+  steps:[
+   {t:"Plan d'adressage",cmds:"Sous-réseau 1 : 192.168.1.0/26  → PCs Bât. A (PC1: .10, GW: .1)\nSous-réseau 2 : 192.168.1.64/27 → PCs Bât. B (PC2: .65, GW: .65)\nSous-réseau 3 : 192.168.1.96/28 → Serveurs\nSous-réseau 4 : 192.168.1.112/30→ Lien WAN"},
+   {t:"Configuration routeur",cmds:"R1(config)# interface gi0/0\nR1(config-if)# ip address 192.168.1.1 255.255.255.192\nR1(config-if)# no shutdown\nR1(config-if)# exit\nR1(config)# interface gi0/1\nR1(config-if)# ip address 192.168.1.65 255.255.255.224\nR1(config-if)# no shutdown\nR1# show ip route\nR1# show ip interface brief"}
+  ],
+  verify:"✓ PC1 ping PC2 (réseaux différents via R1) : Reply\n✓ show ip route → C 192.168.1.0/26 et C 192.168.1.64/27\n✓ PC1 ne peut pas pinguer directement PC2 sans R1"}
+},
+{d:27,topic:"IPv6 Addressing",ic:"6️⃣",
+ sub:["Format IPv6 128 bits (8 groupes de 16 bits)","Règles de compression (:: et zéros initiaux)","Types : Global Unicast, Link-Local (FE80::), Multicast (FF::), Anycast","EUI-64 (insertion FF:FE + inversion bit 7)","SLAAC (Stateless Address Autoconfiguration)","Migration IPv4 vers IPv6"],
+ ex:[
+  {q:"Compressez ces adresses IPv6 :\n1. 2001:0DB8:0000:0000:0000:0000:0000:0001\n2. FE80:0000:0000:0000:02AA:00FF:FE00:0001",ans:"1. 2001:DB8::1\n   (zéros initiaux supprimés + :: pour les 5 groupes 0000)\n\n2. FE80::2AA:FF:FE00:1\n   (zéros initiaux supprimés + :: pour les 3 groupes 0000)"},
+  {q:"Calculez l'adresse EUI-64 pour :\nMAC : 00:1A:2B:3C:4D:5E\nPréfixe : 2001:DB8::/64",ans:"Étapes EUI-64 :\n1. Séparer la MAC en 2 moitiés : 00:1A:2B | 3C:4D:5E\n2. Insérer FF:FE au milieu : 00:1A:2B:FF:FE:3C:4D:5E\n3. Inverser le bit 7 du 1er octet :\n   00 = 0000 0000 → bit 7 inversé → 0000 0010 = 02\n4. Résultat : 02:1A:2B:FF:FE:3C:4D:5E\n   → Interface ID : 021A:2BFF:FE3C:4D5E\n\nAdresse complète : 2001:DB8::021A:2BFF:FE3C:4D5E/64"}
+ ],
+ lab:{title:"Lab — Configuration IPv6 statique et EUI-64",badge:"cli",
+  obj:"Configurer IPv6 sur un routeur : adresse statique + EUI-64, vérifier la connectivité.",
+  topo:"[PC1]──Gi0/0[R1]Gi0/1──[PC2]\n2001:DB8:1::/64       2001:DB8:2::/64",
+  steps:[
+   {t:"Activer IPv6 et configurer",cmds:"R1(config)# ipv6 unicast-routing\nR1(config)# interface gi0/0\nR1(config-if)# ipv6 address 2001:DB8:1::1/64\nR1(config-if)# no shutdown\nR1(config-if)# exit\nR1(config)# interface gi0/1\nR1(config-if)# ipv6 address 2001:DB8:2::1/64\nR1(config-if)# no shutdown"},
+   {t:"Vérification",cmds:"R1# show ipv6 interface brief\nR1# show ipv6 route\nR1# ping ipv6 2001:DB8:2::10\n! Observer l'adresse Link-Local auto-générée (FE80::)"}
+  ],
+  verify:"✓ show ipv6 interface brief → 2001:DB8:1::1 [up/up]\n✓ Adresse Link-Local auto : FE80::/10\n✓ Ping IPv6 entre PC1 et PC2 : Reply\n✓ show ipv6 route → C 2001:DB8:1::/64 et 2::/64"}
+},
+{d:26,topic:"VLAN and Trunking Concepts and Configurations",ic:"🏷️",
+ sub:["VLAN concepts et bénéfices","Trunking 802.1Q","Configuration et vérification VLANs","Configuration et vérification Trunk","Dépannage VLANs et Trunking"],
+ ex:[
+  {q:"Quelle est la différence entre un port Access et un port Trunk ?\nDonnez un exemple d'utilisation pour chacun.",ans:"Port ACCESS :\n- Appartient à UN seul VLAN\n- Trames sans tag (transparent pour l'hôte)\n- Utilisé pour : PCs, serveurs, imprimantes\nEx : S1(config-if)# switchport mode access\n     S1(config-if)# switchport access vlan 10\n\nPort TRUNK :\n- Transporte PLUSIEURS VLANs simultanément\n- Trames taguées 802.1Q (sauf Native VLAN)\n- Utilisé pour : liens switch-switch, switch-routeur\nEx : S1(config-if)# switchport mode trunk"},
+  {q:"Configurez sur S1 :\n- VLAN 10 (nom: RH), VLAN 20 (nom: IT)\n- Port Fa0/1 → VLAN 10 access\n- Port Gi0/1 → trunk, native VLAN 99",ans:"S1(config)# vlan 10\nS1(config-vlan)# name RH\nS1(config)# vlan 20\nS1(config-vlan)# name IT\nS1(config)# vlan 99\nS1(config-vlan)# name NATIVE\nS1(config)# interface fa0/1\nS1(config-if)# switchport mode access\nS1(config-if)# switchport access vlan 10\nS1(config)# interface gi0/1\nS1(config-if)# switchport mode trunk\nS1(config-if)# switchport trunk native vlan 99\nS1(config-if)# switchport trunk allowed vlan 10,20,99"}
+ ],
+ lab:{title:"Lab — VLANs multi-switch + Trunk",badge:"pt",
+  obj:"Créer 3 VLANs sur 2 switches interconnectés en trunk. Vérifier l'isolation.",
+  topo:"[PC-RH .10]─Fa0/1─[S1]═trunk═[S2]─Fa0/1─[PC-RH2 .11]\n[PC-IT .20]─Fa0/2                  Fa0/2─[PC-IT2 .21]",
+  steps:[
+   {t:"VLANs et ports access sur S1 et S2",cmds:"! Sur S1 ET S2 (identique) :\nS1(config)# vlan 10\nS1(config-vlan)# name RH\nS1(config)# vlan 20\nS1(config-vlan)# name IT\nS1(config)# interface fa0/1\nS1(config-if)# switchport mode access\nS1(config-if)# switchport access vlan 10\nS1(config)# interface fa0/2\nS1(config-if)# switchport mode access\nS1(config-if)# switchport access vlan 20"},
+   {t:"Trunk entre S1 et S2",cmds:"! Sur S1 Gi0/1 ET S2 Gi0/1 :\nS1(config)# interface gi0/1\nS1(config-if)# switchport mode trunk\nS1(config-if)# switchport trunk allowed vlan 10,20\n\n! Vérification :\nS1# show vlan brief\nS1# show interfaces trunk\nS1# show interfaces gi0/1 switchport"}
+  ],
+  verify:"✓ PC-RH ping PC-RH2 (même VLAN 10) : Reply ✓\n✓ PC-RH ping PC-IT : ÉCHEC (VLANs différents) ✓\n✓ show vlan brief → VLANs 10, 20 actifs\n✓ show interfaces trunk → Gi0/1 trunk, VLANs 10,20"}
+},
+{d:25,topic:"STP",ic:"🌳",
+ sub:["STP Concepts (802.1D) — prévention des boucles","Élection Root Bridge (Bridge ID = Priority + MAC)","Port Roles : Root, Designated, Blocked","Port States : Blocking → Listening → Learning → Forwarding","RSTP (802.1W) — convergence < 1 seconde","PVST+ et Rapid PVST+","PortFast et BPDU Guard"],
+ ex:[
+  {q:"Expliquez l'élection Root Bridge :\nS1 : priority 32768, MAC 0000.0000.AAAA\nS2 : priority 4096,  MAC 0000.0000.BBBB\nS3 : priority 32768, MAC 0000.0000.1111\nQuel switch devient Root Bridge ?",ans:"S2 devient Root Bridge.\nBridge ID = Priority + MAC\nS1 : 32768 + AAAA\nS2 :  4096 + BBBB  ← plus petit ID → Root Bridge\nS3 : 32768 + 1111\n\nRègle : priorité la PLUS BASSE gagne.\nÉgalité de priorité → MAC la plus basse gagne."},
+  {q:"Pourquoi activer PortFast sur un port access ?\nQuel risque si mal configuré ?",ans:"PortFast : passe directement de Blocking à Forwarding\nsans attendre 30-50 secondes (Listening + Learning).\nIdéal pour les ports vers PC/serveurs qui n'ont pas\nbesoin de STP.\n\nRisque : si on connecte un SWITCH sur un port PortFast,\nles BPDUs créent des boucles potentielles.\n\nSolution : toujours coupler PortFast avec BPDU Guard :\nS1(config-if)# spanning-tree portfast\nS1(config-if)# spanning-tree bpduguard enable\n→ Si un BPDU est reçu : port en err-disabled"}
+ ],
+ lab:{title:"Lab — STP : élection, PortFast, BPDU Guard",badge:"cli",
+  obj:"Observer l'élection Root Bridge, configurer RSTP et protéger les ports access.",
+  topo:"         [S1]\n        /      \\\n      [S2]────[S3]\n   (un port bloqué pour éviter la boucle)",
+  steps:[
+   {t:"Observer STP et forcer le Root Bridge",cmds:"! Vérifier l'état actuel :\nS1# show spanning-tree\nS1# show spanning-tree summary\n\n! Forcer S1 comme Root Bridge :\nS1(config)# spanning-tree vlan 1 root primary\n! ou manuellement :\nS1(config)# spanning-tree vlan 1 priority 4096\n\n! Passer en Rapid PVST+ :\nS1(config)# spanning-tree mode rapid-pvst"},
+   {t:"PortFast et BPDU Guard sur ports access",cmds:"! Sur les ports vers les PCs (S2 Fa0/1, S3 Fa0/1) :\nS2(config)# interface fa0/1\nS2(config-if)# spanning-tree portfast\nS2(config-if)# spanning-tree bpduguard enable\n\n! Vérification :\nS2# show spanning-tree interface fa0/1 detail\nS1# show spanning-tree  (S1 doit être Root)"}
+  ],
+  verify:"✓ S1 → 'This bridge is the root'\n✓ Port vers PC : Edge port (PortFast actif)\n✓ BPDU Guard : brancher un switch → err-disabled\n✓ RSTP convergence < 1s (vs 30-50s STP classique)"}
+},
+{d:24,topic:"EtherChannel and HSRP",ic:"⛓️",
+ sub:["EtherChannel : agrégation de liens (LAG)","LACP (802.3ad) — standard IEEE : modes active/passive","PAgP — propriétaire Cisco : modes desirable/auto","Configuration et vérification EtherChannel","FHRP : HSRP, VRRP, GLBP","HSRP : Active, Standby, Virtual IP, Preempt"],
+ ex:[
+  {q:"Quelle est la différence entre LACP et PAgP ?\nModes de chaque protocole ?",ans:"LACP (IEEE 802.3ad) — standard ouvert :\n- active : initie la négociation LACP\n- passive : attend la négociation\n- active-active ou active-passive → EtherChannel OK\n\nPAgP (propriétaire Cisco) :\n- desirable : initie la négociation PAgP\n- auto : attend la négociation\n- desirable-desirable ou desirable-auto → OK\n\nEn multi-vendeur → utiliser LACP obligatoirement"},
+  {q:"Dans HSRP, PC a gateway 192.168.1.1 (VIP).\nR1 est Active (priority 110), R2 est Standby (priority 100).\nQue se passe-t-il si R1 tombe ?",ans:"1. R2 ne reçoit plus les Hello HSRP de R1\n   (Hold time = 10s par défaut)\n2. Après 10s : R2 devient ACTIVE\n3. R2 prend l'IP virtuelle 192.168.1.1\n   et la MAC virtuelle (0000.0C07.ACxx)\n4. Les PCs continuent d'envoyer vers 192.168.1.1\n   → trafic redirigé vers R2 automatiquement\n5. Les PCs ne voient aucune interruption\n   (transparent pour les hôtes)"}
+ ],
+ lab:{title:"Lab — EtherChannel LACP + HSRP",badge:"cli",
+  obj:"Configurer un EtherChannel LACP entre 2 switches et HSRP entre 2 routeurs.",
+  topo:"[S1]══Po1(Fa0/1+Fa0/2)══[S2]    [R1 Active]──[R2 Standby]\n                             VIP HSRP: 192.168.1.1",
+  steps:[
+   {t:"EtherChannel LACP (S1 et S2)",cmds:"! Sur S1 :\nS1(config)# interface range fa0/1-2\nS1(config-if-range)# channel-group 1 mode active\nS1(config-if-range)# exit\nS1(config)# interface port-channel 1\nS1(config-if)# switchport mode trunk\n! Identique sur S2 (mode active)\n\nS1# show etherchannel summary"},
+   {t:"HSRP sur R1 (Active) et R2 (Standby)",cmds:"! R1 :\nR1(config)# interface gi0/0\nR1(config-if)# ip address 192.168.1.2 255.255.255.0\nR1(config-if)# standby 1 ip 192.168.1.1\nR1(config-if)# standby 1 priority 110\nR1(config-if)# standby 1 preempt\n! R2 :\nR2(config-if)# ip address 192.168.1.3 255.255.255.0\nR2(config-if)# standby 1 ip 192.168.1.1\nR2(config-if)# standby 1 priority 100\nR1# show standby brief"}
+  ],
+  verify:"✓ show etherchannel summary → Po1: SU (in use)\n✓ show standby → R1: Active, R2: Standby\n✓ PC gateway = 192.168.1.1\n✓ Éteindre R1 → R2 devient Active en < 10s"}
+},
+{d:23,topic:"DHCP and DNS",ic:"📋",
+ sub:["DHCPv4 : processus DORA","Options DHCP (router, dns-server, lease)","DHCPv6 : stateful et stateless","DHCP Relay (ip helper-address)","DNS : résolution de noms","Dépannage DHCP et DNS"],
+ ex:[
+  {q:"Décrivez les 4 étapes DORA avec le type de message (broadcast/unicast) :",ans:"1. DISCOVER  : Client → Broadcast 255.255.255.255\n   'Je cherche un serveur DHCP'\n\n2. OFFER     : Serveur → Broadcast (ou Unicast)\n   'Je t'offre IP 192.168.1.10 pour 24h'\n\n3. REQUEST   : Client → Broadcast\n   'J'accepte l'offre du serveur X'\n\n4. ACKNOWLEDGE: Serveur → Broadcast (ou Unicast)\n   'C'est confirmé, IP attribuée'\n\nMémorise : DORA !"},
+  {q:"Configurez un routeur comme serveur DHCP :\nPool LAN, réseau 192.168.1.0/24\nExclure .1 à .19, DNS 8.8.8.8, bail 1 jour",ans:"R1(config)# ip dhcp excluded-address 192.168.1.1 192.168.1.19\nR1(config)# ip dhcp pool LAN\nR1(dhcp-config)# network 192.168.1.0 255.255.255.0\nR1(dhcp-config)# default-router 192.168.1.1\nR1(dhcp-config)# dns-server 8.8.8.8\nR1(dhcp-config)# lease 1\n\nVérification :\nR1# show ip dhcp pool\nR1# show ip dhcp binding"}
+ ],
+ lab:{title:"Lab — Routeur Cisco comme serveur DHCP",badge:"cli",
+  obj:"Configurer DHCP sur un routeur et vérifier que les clients obtiennent une IP.",
+  topo:"[PC1 DHCP]──[Switch]──Gi0/0[R1 DHCP Server 192.168.1.1/24]",
+  steps:[
+   {t:"Configuration serveur DHCP",cmds:"R1(config)# ip dhcp excluded-address 192.168.1.1 192.168.1.19\nR1(config)# ip dhcp pool BUREAU\nR1(dhcp-config)# network 192.168.1.0 255.255.255.0\nR1(dhcp-config)# default-router 192.168.1.1\nR1(dhcp-config)# dns-server 8.8.8.8 8.8.4.4\nR1(dhcp-config)# lease 0 12\nR1(dhcp-config)# exit\nR1(config)# interface gi0/0\nR1(config-if)# ip address 192.168.1.1 255.255.255.0\nR1(config-if)# no shutdown"},
+   {t:"Vérification",cmds:"R1# show ip dhcp pool\nR1# show ip dhcp binding\nR1# show ip dhcp conflict\n! Sur PC Windows :\n  ipconfig /release\n  ipconfig /renew\n  ipconfig /all"}
+  ],
+  verify:"✓ PC obtient IP dans 192.168.1.20-254\n✓ show ip dhcp binding → entrée avec MAC du PC\n✓ PC ping 192.168.1.1 (gateway) : Reply\n✓ DNS configuré : 8.8.8.8"}
+},
+{d:22,topic:"Wireless Concepts",ic:"📶",
+ sub:["Standards 802.11 (a/b/g/n/ac/ax) — fréquences et débits","Topologies : BSS, ESS, IBSS (ad-hoc)","Architectures AP : Autonomous vs Lightweight (CAPWAP)","Sécurité : WEP (obsolète), WPA, WPA2 (AES-CCMP), WPA3 (SAE)","Canaux non-chevauchants 2.4 GHz : 1, 6, 11"],
+ ex:[
+  {q:"Complétez le tableau des standards Wi-Fi :\n802.11g  | ___GHz | 54 Mbps  | ___\n802.11n  | ___GHz | ___ Mbps | MIMO\n802.11ac | 5 GHz  | ___ Gbps | ___\n802.11ax | ___GHz | ___ Gbps | ___",ans:"802.11g  | 2.4 GHz    | 54 Mbps    | OFDM\n802.11n  | 2.4+5 GHz  | 600 Mbps   | MIMO\n802.11ac | 5 GHz      | 3.5 Gbps   | MU-MIMO\n802.11ax | 2.4+5 GHz  | 9.6 Gbps   | OFDMA, MU-MIMO 8x8"},
+  {q:"Pourquoi NE PAS utiliser WEP ni WPA en production ?",ans:"WEP :\n- RC4 avec IVs statiques → crackable en < 5 minutes\n- Déprécié depuis 2004\n\nWPA :\n- TKIP (RC4 amélioré) → encore vulnérable\n- Attaques sur le handshake 4-way\n- Déprécié depuis 2009\n\nUtiliser minimum WPA2 (AES-CCMP)\nOu WPA3 (SAE/Dragonfly) si disponible\nWPA3 : protège même si le mot de passe est faible"}
+ ],
+ lab:{title:"Lab — AP Wireless dans Packet Tracer",badge:"pt",
+  obj:"Configurer un AP avec WPA2 et connecter des clients sans fil.",
+  topo:"[Laptop1]    [Laptop2]\n    )))       (((\n         [AP]\n          |\n       [Switch]\n          |\n       [Router]",
+  steps:[
+   {t:"Configuration de l'AP",cmds:"1. Ajouter AP-PT + 2 Laptops dans Packet Tracer\n2. Clic AP → Config → Wireless\n   SSID : CCNA-Lab\n   Authentication : WPA2-PSK\n   PSK Passphrase : Cisco@2024\n   Encryption : AES\n3. Connecter AP au Switch par câble"},
+   {t:"Connexion des clients",cmds:"1. Clic Laptop → Config → Wireless0\n   SSID : CCNA-Lab\n   WPA2-PSK : Cisco@2024\n2. Config IP DHCP ou manual :\n   IP: 192.168.1.10/24, GW: 192.168.1.1\n3. Desktop → Command Prompt\n   ping 192.168.1.1"}
+  ],
+  verify:"✓ AP : icône Wi-Fi verte (clients associés)\n✓ Laptop1 ping Laptop2 : Reply\n✓ Mauvais PSK → association refusée\n✓ Mode Simulation : observer les trames 802.11"}
+},
+{d:21,topic:"WLAN Configuration",ic:"🔧",
+ sub:["Interface web du WLC Cisco","Configuration WLAN sur WLC","AP Registration (CAPWAP : UDP 5246/5247)","Profils de sécurité sur WLC","WPA2-Enterprise avec 802.1X/RADIUS"],
+ ex:[
+  {q:"Quelle est la différence entre AP Autonome et AP Lightweight ?\nDonnez avantages et inconvénients.",ans:"AP AUTONOME :\n+ Simple, pas besoin de WLC\n+ Bon pour petites installations (< 5 APs)\n- Configuration individuelle sur chaque AP\n- Gestion décentralisée difficile à scaler\n\nAP LIGHTWEIGHT (CAPWAP) :\n+ Gestion centralisée via WLC\n+ Scalable (des centaines d'APs)\n+ Mises à jour et politiques centralisées\n- Nécessite un WLC (coût)\n- Dépendance WLC (single point of failure si WLC tombe)"},
+  {q:"Quels ports UDP utilise CAPWAP entre AP et WLC ?",ans:"CAPWAP utilise 2 tunnels UDP :\n- UDP 5246 : tunnel de CONTRÔLE\n  (management, configuration, commandes)\n- UDP 5247 : tunnel de DONNÉES\n  (trafic client encapsulé)\n\nL'AP doit pouvoir joindre le WLC sur ces ports.\nDécouverte WLC : DHCP option 43, DNS, broadcast local"}
+ ],
+ lab:{title:"Lab — Simulation WLC (Packet Tracer)",badge:"pt",
+  obj:"Configurer un WLAN basique dans Packet Tracer avec un WLC.",
+  topo:"[Lightweight AP]──[Switch]──[WLC]\n                         ──[Router/DHCP]",
+  steps:[
+   {t:"Topologie Packet Tracer avec WLC",cmds:"1. Ajouter : WLC-3504, Lightweight AP, Switch, Router\n2. Connecter : AP → Switch (Gi0/1)\n   WLC → Switch (Gi0/2), Router → Switch (Gi0/3)\n3. Configurer DHCP sur Router :\n   Pool : 192.168.100.0/24\n   Option 43 : IP du WLC (192.168.100.200)"},
+   {t:"Configuration WLC via interface web",cmds:"1. PC → navigateur → https://192.168.100.200\n2. Login : admin / Cisco@123\n3. WLANs → Create New\n   SSID : Corp-Wifi\n   Security : WPA2 PSK\n   Passphrase : CorpPass2024\n4. Apply et vérifier que l'AP s'enregistre"}
+  ],
+  verify:"✓ AP Status : Registered (vert)\n✓ WLAN Corp-Wifi actif\n✓ Laptop Wi-Fi se connecte au SSID\n✓ show ap summary (WLC CLI) → AP listé"}
+},
+{d:20,topic:"LAN Security and Device Hardening",ic:"🔒",
+ sub:["Endpoint Security (antivirus, firewall, NAC)","Access Control (AAA : Authentication Authorization Accounting)","Port Security (violation : Protect/Restrict/Shutdown)","DHCP Snooping","Dynamic ARP Inspection (DAI)","802.1X (supplicant, authenticator, RADIUS)"],
+ ex:[
+  {q:"Configurez Port Security sur Fa0/1 :\n- Maximum 2 MACs autorisées\n- Mode sticky\n- Violation : shutdown",ans:"S1(config)# interface fa0/1\nS1(config-if)# switchport mode access\nS1(config-if)# switchport port-security\nS1(config-if)# switchport port-security maximum 2\nS1(config-if)# switchport port-security mac-address sticky\nS1(config-if)# switchport port-security violation shutdown\n\nVérification :\nS1# show port-security interface fa0/1\nS1# show port-security address"},
+  {q:"Qu'est-ce que DHCP Snooping et pourquoi est-ce important ?",ans:"DHCP Snooping filtre les messages DHCP non autorisés.\n\nSans DHCP Snooping : un attaquant peut brancher un\nfaux serveur DHCP → distribue de fausses IPs/gateways\n→ Man-in-the-Middle / Rogue DHCP attack\n\nPorts TRUSTED : vers le vrai serveur DHCP / uplinks\nPorts UNTRUSTED (défaut) : bloquent DHCP OFFER/ACK\n\nConfiguration :\nS1(config)# ip dhcp snooping\nS1(config)# ip dhcp snooping vlan 10\nS1(config)# interface gi0/1  (uplink)\nS1(config-if)# ip dhcp snooping trust"}
+ ],
+ lab:{title:"Lab — DHCP Snooping + Port Security",badge:"cli",
+  obj:"Protéger le réseau contre les faux serveurs DHCP et le MAC flooding.",
+  topo:"[Vrai DHCP]─Fa0/1(TRUSTED)\n[Faux DHCP]─Fa0/2(UNTRUSTED) [S1]\n[PC1]───────Fa0/3(UNTRUSTED)",
+  steps:[
+   {t:"DHCP Snooping",cmds:"S1(config)# ip dhcp snooping\nS1(config)# ip dhcp snooping vlan 1\nS1(config)# no ip dhcp snooping information option\nS1(config)# interface fa0/1\nS1(config-if)# ip dhcp snooping trust\n! Fa0/2 et Fa0/3 restent UNTRUSTED (défaut)\n\nS1# show ip dhcp snooping\nS1# show ip dhcp snooping binding"},
+   {t:"Port Security sur Fa0/3",cmds:"S1(config)# interface fa0/3\nS1(config-if)# switchport mode access\nS1(config-if)# switchport port-security\nS1(config-if)# switchport port-security maximum 1\nS1(config-if)# switchport port-security mac-address sticky\nS1(config-if)# switchport port-security violation restrict"}
+  ],
+  verify:"✓ Faux DHCP sur Fa0/2 → ses OFFER bloqués\n✓ PC1 obtient IP du vrai DHCP seulement\n✓ 2ème PC sur Fa0/3 → violation restrict (compteur++)\n✓ show ip dhcp snooping binding → baux légitimes"}
+},
+{d:19,topic:"Basic Routing Concepts",ic:"🗺️",
+ sub:["Fonctions d'un routeur : routing et forwarding","Méthodes de routage : statique, dynamique, par défaut","Classification : IGP vs EGP, Distance-Vector vs Link-State","Métriques : sauts, bande passante, délai, coût","Distance Administrative (AD)","Prévention des boucles de routage","Link-State vs Distance-Vector"],
+ ex:[
+  {q:"Classez ces sources de routes par AD (de la plus fiable à la moins fiable) :\nOSPF, Route connectée, EIGRP interne, RIP, Route statique, iBGP",ans:"Route connectée    : AD 0\nRoute statique     : AD 1\nEIGRP interne      : AD 90\nOSPF               : AD 110\nRIP                : AD 120\niBGP               : AD 200\n\nPlus l'AD est BASSE → plus la source est FIABLE\nAD 255 = non fiable, jamais utilisée"},
+  {q:"Quelle différence entre Distance-Vector et Link-State ?",ans:"Distance-Vector (ex: RIP) :\n- Envoie SA TABLE DE ROUTAGE aux voisins directs\n- Vue partielle du réseau\n- Convergence lente (count-to-infinity)\n- Métrique : nombre de sauts max 15\n\nLink-State (ex: OSPF) :\n- Flood les LSAs à TOUS les routeurs\n- Vue complète de la topologie (LSDB)\n- Convergence rapide (SPF/Dijkstra)\n- Métrique : cost (basé sur la bande passante)"}
+ ],
+ lab:{title:"Lab — Distance Administrative en pratique",badge:"cli",
+  obj:"Observer comment l'AD détermine quelle route est préférée dans la table de routage.",
+  topo:"[R1]──10.0.0.0/30──[R2]──10.0.1.0/30──[R3]\n    192.168.1.0/24              192.168.3.0/24",
+  steps:[
+   {t:"Configurer RIPv2 + route statique sur R1",cmds:"! RIPv2\nR1(config)# router rip\nR1(config-router)# version 2\nR1(config-router)# no auto-summary\nR1(config-router)# network 192.168.1.0\nR1(config-router)# network 10.0.0.0\n\n! Route statique vers même destination\nR1(config)# ip route 192.168.3.0 255.255.255.0 10.0.0.2\nR1# show ip route 192.168.3.0"},
+   {t:"Observer la préférence AD",cmds:"! La route statique (AD=1) écrase RIP (AD=120)\nR1# show ip route\n! Code 'S' visible pour la statique\n\n! Floating static route (AD > 120) :\nR1(config)# ip route 192.168.3.0 255.255.255.0 10.0.1.2 150\n! RIP (AD=120) préféré à la floating static (AD=150)"}
+  ],
+  verify:"✓ Route statique [1/0] prend la priorité sur RIP [120/x]\n✓ show ip route → S 192.168.3.0 [1/0]\n✓ Floating static [150/0] INVISIBLE (RIP préféré)\n✓ Si lien RIP tombe → floating static apparaît"}
+},
+{d:18,topic:"Basic Router Configuration",ic:"🔩",
+ sub:["Configuration IPv4 sur interfaces","Configuration IPv6 sur interfaces","Vérification de la connectivité (ping, traceroute)","Routeurs SOHO","Dépannage de base (down/down vs up/down)"],
+ ex:[
+  {q:"Quelle est la différence entre interface 'down/down' et 'up/down' ?\nQue vérifier dans chaque cas ?",ans:"down/down (line/protocol) : problème PHYSIQUE\n→ Câble déconnecté ou défectueux\n→ Équipement distant éteint\n→ Mauvais type de câble\n→ Vérifier : show interfaces, test cable\n\nup/down : problème au niveau PROTOCOLE\n→ Encapsulation incompatible (PPP vs HDLC)\n→ clock rate manquant côté DCE\n→ Mauvaise configuration IP\n→ Vérifier : show interfaces (encapsulation)\n             debug serial interface"},
+  {q:"Configurez R1 avec :\nGi0/0 : 192.168.1.1/24 (LAN)\nGi0/1 : 10.0.0.1/30 (WAN vers R2)\nDescription sur chaque interface",ans:"R1(config)# interface gi0/0\nR1(config-if)# description LAN-RESEAU-LOCAL\nR1(config-if)# ip address 192.168.1.1 255.255.255.0\nR1(config-if)# no shutdown\nR1(config-if)# exit\nR1(config)# interface gi0/1\nR1(config-if)# description WAN-VERS-R2\nR1(config-if)# ip address 10.0.0.1 255.255.255.252\nR1(config-if)# no shutdown\nR1# show ip interface brief"}
+ ],
+ lab:{title:"Lab — Configuration routeur complet",badge:"cli",
+  obj:"Configurer toutes les interfaces d'un routeur et vérifier la connectivité.",
+  topo:"[PC1]──[S1]──Gi0/0[R1]Gi0/1──[S2]──[PC2]\n       192.168.1.0/24       192.168.2.0/24",
+  steps:[
+   {t:"Configuration interfaces R1",cmds:"R1(config)# hostname R1-HQ\nR1-HQ(config)# interface gi0/0\nR1-HQ(config-if)# description TO-LAN-A\nR1-HQ(config-if)# ip address 192.168.1.1 255.255.255.0\nR1-HQ(config-if)# no shutdown\nR1-HQ(config)# interface gi0/1\nR1-HQ(config-if)# description TO-LAN-B\nR1-HQ(config-if)# ip address 192.168.2.1 255.255.255.0\nR1-HQ(config-if)# no shutdown"},
+   {t:"Vérification",cmds:"R1# show ip interface brief\nR1# show ip route\nR1# ping 192.168.1.10\nR1# ping 192.168.2.10\nR1# traceroute 192.168.2.10"}
+  ],
+  verify:"✓ show ip int brief → Gi0/0 et Gi0/1 : up/up\n✓ show ip route → C 192.168.1.0 et C 192.168.2.0\n✓ PC1 ping PC2 via R1 : Reply\n✓ traceroute PC1→PC2 : 1 saut (via R1)"}
+},
+{d:17,topic:"The Routing Table",ic:"📊",
+ sub:["Deux fonctions du routeur : routing et forwarding","Composants d'une entrée de route (code, réseau, AD/metric, next-hop, interface, uptime)","Longest Prefix Match","Codes : C S O D R B i"],
+ ex:[
+  {q:"Analysez cette entrée :\nO  10.1.2.0/24 [110/20] via 10.0.0.2, 00:05:43, GigabitEthernet0/1\n\nExpliquez chaque élément.",ans:"O          : Source = OSPF\n10.1.2.0/24: Réseau destination / masque\n[110/20]   : [AD=110 / Métrique OSPF=20 (cost)]\nvia 10.0.0.2: Next-hop (prochain saut)\n00:05:43   : Uptime (depuis combien de temps)\nGi0/1      : Interface de sortie"},
+  {q:"Pour la destination 10.1.2.5, quel route est choisie ?\nS  10.0.0.0/8    [1/0]  via 10.0.0.1\nO  10.1.0.0/16   [110/20] via 10.0.0.2\nO  10.1.2.0/24   [110/15] via 10.0.0.3",ans:"Réponse : O 10.1.2.0/24 via 10.0.0.3\n\nRaison : LONGEST PREFIX MATCH\n10.1.2.5 matche les 3 routes, mais /24 est la plus\nSPÉCIFIQUE → choisie en priorité.\nL'AD et la métrique ne comptent PAS quand les\npréfixes sont de longueurs différentes."}
+ ],
+ lab:{title:"Lab — Analyse et manipulation de la table de routage",badge:"cli",
+  obj:"Lire la table de routage et tester le longest prefix match.",
+  topo:"[R1]──OSPF──[R2]──OSPF──[R3]  (3 réseaux LAN)",
+  steps:[
+   {t:"Commandes d'analyse",cmds:"R1# show ip route\nR1# show ip route ospf\nR1# show ip route summary\nR1# show ip route 10.1.2.5\n! Observer quel réseau est sélectionné"},
+   {t:"Tester Longest Prefix Match",cmds:"! Ajouter 2 routes vers même destination\nR1(config)# ip route 10.0.0.0 255.0.0.0 10.1.1.2\nR1(config)# ip route 10.1.2.0 255.255.255.0 10.1.1.3\n\nR1# show ip route 10.1.2.5\n! /24 est sélectionnée (plus spécifique)\nR1# show ip route 10.2.0.1\n! /8 est sélectionnée (seul match)"}
+  ],
+  verify:"✓ show ip route 10.1.2.5 → route /24 choisie\n✓ show ip route 10.2.0.1 → route /8 choisie\n✓ Codes maîtrisés : C S O D R B i\n✓ show ip route summary → routes par protocole"}
+},
+{d:16,topic:"Inter-VLAN Routing",ic:"🔀",
+ sub:["Problème : les VLANs isolent le trafic","Router on a Stick (sous-interfaces 802.1Q)","Switch Layer 3 avec SVIs (interface vlan X)","Comparaison des deux méthodes"],
+ ex:[
+  {q:"Configurez Router on a Stick pour VLAN 10 (192.168.10.0/24)\net VLAN 20 (192.168.20.0/24) sur Gi0/0.",ans:"R1(config)# interface gi0/0\nR1(config-if)# no ip address\nR1(config-if)# no shutdown\nR1(config)# interface gi0/0.10\nR1(config-subif)# encapsulation dot1q 10\nR1(config-subif)# ip address 192.168.10.1 255.255.255.0\nR1(config)# interface gi0/0.20\nR1(config-subif)# encapsulation dot1q 20\nR1(config-subif)# ip address 192.168.20.1 255.255.255.0"},
+  {q:"Quel avantage a le Switch L3 (SVIs) sur le Router on a Stick ?",ans:"Router on a Stick :\n- Un seul lien physique → goulot d'étranglement\n- Latence supplémentaire (aller-retour)\n- Single point of failure\n\nSwitch Layer 3 (SVIs) :\n+ Routage matériel (ASIC) → performances maximales\n+ Pas de lien externe → pas de goulot\n+ Plus fiable\n+ Recommandé en production\nEx: S1(config)# interface vlan 10\n    S1(config-if)# ip address 192.168.10.1 255.255.255.0"}
+ ],
+ lab:{title:"Lab — Router on a Stick",badge:"pt",
+  obj:"Permettre la communication entre VLAN 10 (RH) et VLAN 20 (IT).",
+  topo:"[PC-RH .10]─Fa0/1─[S1]─trunk─Gi0/0[R1]\n[PC-IT .20]─Fa0/2                Gi0/0.10 + Gi0/0.20",
+  steps:[
+   {t:"Switch S1 : VLANs + Trunk",cmds:"S1(config)# vlan 10\nS1(config)# vlan 20\nS1(config)# interface fa0/1\nS1(config-if)# switchport mode access\nS1(config-if)# switchport access vlan 10\nS1(config)# interface fa0/2\nS1(config-if)# switchport mode access\nS1(config-if)# switchport access vlan 20\nS1(config)# interface gi0/1\nS1(config-if)# switchport mode trunk"},
+   {t:"Router R1 : Router on a Stick",cmds:"R1(config)# interface gi0/0\nR1(config-if)# no shutdown\nR1(config)# interface gi0/0.10\nR1(config-subif)# encapsulation dot1q 10\nR1(config-subif)# ip address 192.168.10.1 255.255.255.0\nR1(config)# interface gi0/0.20\nR1(config-subif)# encapsulation dot1q 20\nR1(config-subif)# ip address 192.168.20.1 255.255.255.0"}
+  ],
+  verify:"✓ PC-RH (10.x) ping PC-IT (20.x) via R1 : Reply\n✓ show ip route → R1 voit les 2 réseaux VLAN\n✓ Sans R1 → ping échoue (VLANs isolés)\n✓ show interfaces gi0/0.10 → encapsulation 802.1Q"}
+},
+{d:15,topic:"Static and Default Route Configuration",ic:"➡️",
+ sub:["Routes statiques (next-hop ou interface de sortie)","Route par défaut (0.0.0.0/0)","Floating Static Routes (AD élevée = backup)","Vérification et dépannage"],
+ ex:[
+  {q:"Configurez sur R1 :\n1. Route statique vers 10.2.0.0/24 via 10.0.0.2\n2. Floating static vers 10.2.0.0/24 via 10.0.1.2 (backup)\n3. Route par défaut vers Internet via 203.0.113.1",ans:"! Route principale (AD=1)\nR1(config)# ip route 10.2.0.0 255.255.255.0 10.0.0.2\n\n! Floating static backup (AD=150 > 1)\nR1(config)# ip route 10.2.0.0 255.255.255.0 10.0.1.2 150\n\n! Route par défaut\nR1(config)# ip route 0.0.0.0 0.0.0.0 203.0.113.1"},
+  {q:"Comment vérifier qu'une route statique est active ?\nQue faire si elle n'apparaît pas dans 'show ip route' ?",ans:"Vérification :\nR1# show ip route static\nR1# show ip route 10.2.0.0\n\nSi absente :\n1. Vérifier que l'interface de sortie est UP\n   → show ip interface brief\n2. Vérifier le next-hop est joignable\n   → ping 10.0.0.2\n3. Vérifier la syntaxe de la commande\n   → show running-config | include ip route\n4. L'interface down → route statique retirée de la table"}
+ ],
+ lab:{title:"Lab — Floating Static Route (redondance WAN)",badge:"cli",
+  obj:"Tester le basculement automatique vers une route de secours quand le lien principal tombe.",
+  topo:"[R1]──Gi0/0 (principal)──[R2]\n[R1]──Gi0/1 (backup)────[R3]──[R2]\nDestination : 192.168.3.0/24",
+  steps:[
+   {t:"Routes statiques sur R1",cmds:"! Principale (AD=1)\nR1(config)# ip route 192.168.3.0 255.255.255.0 10.0.0.2\n! Floating backup (AD=200, bien > 1)\nR1(config)# ip route 192.168.3.0 255.255.255.0 10.0.1.3 200\n! Default route\nR1(config)# ip route 0.0.0.0 0.0.0.0 10.0.0.2"},
+   {t:"Test de basculement",cmds:"R1# show ip route 192.168.3.0\n! Route [1/0] active\n\n! Simuler panne du lien principal :\nR1(config)# interface gi0/0\nR1(config-if)# shutdown\n\nR1# show ip route 192.168.3.0\n! Floating static [200/0] doit apparaître\nR1# ping 192.168.3.1  (via route backup)"}
+  ],
+  verify:"✓ Lien principal UP → route [1/0] active\n✓ Lien principal DOWN → floating [200/0] prend le relais\n✓ Ping vers 192.168.3.1 réussi dans les 2 cas\n✓ Gateway of last resort : 10.0.0.2"}
+},
+{d:14,topic:"OSPF Operation",ic:"🔄",
+ sub:["Single-Area OSPF Operation","OSPFv2 (IPv4) vs OSPFv3 (IPv6)","Multiarea OSPF (Backbone Area 0, ABR, ASBR)","Types de LSA (1=Router, 2=Network, 3=Summary, 5=External)","Élection DR/BDR sur réseaux multi-accès","États OSPF : Down→Init→2Way→ExStart→Exchange→Loading→Full"],
+ ex:[
+  {q:"Listez les 7 états OSPF dans l'ordre de l'établissement d'une adjacence.",ans:"1. Down     : Aucun Hello reçu\n2. Init     : Hello reçu, mon RID absent\n3. 2-Way    : Hello reçu avec MON RID\n              → DR/BDR élu ici (sur multi-accès)\n4. ExStart  : Négociation Master/Slave\n5. Exchange : Échange des DBD (Database Description)\n6. Loading  : Demande LSAs manquants (LSR → LSU)\n7. Full     : LSDB synchronisé ✓"},
+  {q:"S1 priority=1, S2 priority=0, S3 priority=2, S4 priority=2\nRouter-ID : S4 > S3\nQui devient DR ? Qui devient BDR ?",ans:"S2 : priority=0 → ne participe PAS à l'élection\nS3 et S4 : priority=2 → candidats\nS4 Router-ID > S3 Router-ID → S4 = DR\nS3 = BDR\nS1 (priority=1) = DROTHER\n\nDR = 224.0.0.6 (Designated Router)\nBDR = backup si DR tombe\nDROTHER = envoie updates à 224.0.0.6 seulement"}
+ ],
+ lab:{title:"Lab — OSPF Single-Area : adjacences et DR/BDR",badge:"cli",
+  obj:"Configurer OSPF sur 3 routeurs et observer l'élection DR/BDR et la synchronisation LSDB.",
+  topo:"[R1 RID:1.1.1.1]──[Switch]──[R2 RID:2.2.2.2]\n                         ──[R3 RID:3.3.3.3]\n       Réseau multi-accès 192.168.0.0/24",
+  steps:[
+   {t:"Configuration OSPF sur R1, R2, R3",cmds:"! Sur R1 :\nR1(config)# router ospf 1\nR1(config-router)# router-id 1.1.1.1\nR1(config-router)# network 192.168.0.0 0.0.0.255 area 0\nR1(config-router)# network 192.168.1.0 0.0.0.255 area 0\n! Identique sur R2 (RID 2.2.2.2) et R3 (RID 3.3.3.3)"},
+   {t:"Vérification OSPF",cmds:"R1# show ip ospf neighbor\nR1# show ip ospf database\nR1# show ip ospf interface gi0/0\nR1# show ip route ospf\n! Qui est DR ? (RID le plus haut = 3.3.3.3)"}
+  ],
+  verify:"✓ show ip ospf neighbor → State: FULL\n✓ R3 (RID 3.3.3.3) = DR, R2 = BDR, R1 = DROTHER\n✓ show ip route ospf → routes O [110/...]\n✓ Tous les routeurs pinguent tous les réseaux"}
+},
+{d:13,topic:"Single-Area OSPF Implementation",ic:"📡",
+ sub:["Configuration OSPFv2 (network, router-id, passive-interface)","Vérification OSPFv2 (show ip ospf, neighbor, database)","auto-cost reference-bandwidth","Modification des timers Hello/Dead","Default-information originate"],
+ ex:[
+  {q:"Pourquoi configurer 'auto-cost reference-bandwidth 1000' ?\nQue se passe-t-il si on ne le fait pas sur tous les routeurs ?",ans:"Par défaut : reference-bandwidth = 100 Mbps\n→ FastEthernet et GigabitEthernet ont le MÊME cost (1)\n→ Impossible de distinguer les liens par vitesse\n\nauto-cost reference-bandwidth 1000 (= 1 Gbps) :\n→ Gi = cost 1, Fa = cost 10, Serial = cost 64\n→ OSPF préfère correctement les liens les plus rapides\n\nSi non configuré identiquement sur TOUS les routeurs :\n→ Calculs SPF incohérents → boucles potentielles"},
+  {q:"Quelle est la différence entre 'passive-interface' dans RIP et OSPF ?",ans:"Dans RIP et OSPF, passive-interface :\n→ Arrête l'envoi de messages de routage\n   (Hello pour OSPF, Updates pour RIP)\n→ MAIS continue d'annoncer le réseau\n\nUtilisation typique :\nSur les interfaces vers les PCs/serveurs :\n- Pas besoin de voisins de routage\n- Réduit le trafic et la surface d'attaque\n\nR1(config-router)# passive-interface gi0/1\nR1(config-router)# passive-interface default\n  (puis 'no passive-interface' sur les liens actifs)"}
+ ],
+ lab:{title:"Lab — OSPF optimisé : passive-interface et default route",badge:"cli",
+  obj:"Optimiser OSPF avec passive-interface, reference-bandwidth et redistribution de la route par défaut.",
+  topo:"[Internet]──[R1-Edge]──OSPF──[R2]──[R3]\n           (default route originator)",
+  steps:[
+   {t:"OSPF optimisé sur R1",cmds:"R1(config)# router ospf 1\nR1(config-router)# router-id 1.1.1.1\nR1(config-router)# auto-cost reference-bandwidth 1000\nR1(config-router)# network 10.0.0.0 0.0.0.3 area 0\nR1(config-router)# passive-interface gi0/0\nR1(config-router)# default-information originate"},
+   {t:"Ajuster cost manuellement + vérification",cmds:"R1(config)# interface gi0/1\nR1(config-if)# ip ospf cost 10\n\nR2# show ip route ospf\n! Chercher : O*E2 0.0.0.0/0 (default route redistribuée)\nR1# show ip ospf interface gi0/0\n! passive-interface : No Hellos sent\nR1# show ip ospf neighbor"}
+  ],
+  verify:"✓ R2 et R3 ont O*E2 0.0.0.0/0 dans leur table\n✓ passive-interface : no hello sur Gi0/0\n✓ auto-cost : cost Gi = 1, Fa = 10\n✓ R3 peut pinguer Internet via R2 → R1"}
+},
+{d:12,topic:"OSPF Troubleshooting",ic:"🔍",
+ sub:["Raisons d'échec d'adjacence OSPF","Commandes de diagnostic","Corriger les problèmes courants","Vérification après correction"],
+ ex:[
+  {q:"Listez 5 raisons courantes pour lesquelles une adjacence OSPF ne s'établit pas.",ans:"1. Hello/Dead timers différents entre voisins\n   (Hello=10s/Dead=40s sur Ethernet par défaut)\n2. Area ID différente (area 0 ≠ area 1)\n3. Sous-réseaux différents (IPs pas sur même réseau)\n4. Authentification OSPF mal configurée\n5. MTU différents entre interfaces\n\nBonus :\n6. Network type incompatible\n7. Router-ID dupliqué\n8. Stub area flags différents"},
+  {q:"Quelle commande montre si OSPF envoie des Hellos sur une interface ?",ans:"R1# show ip ospf interface gi0/0\n→ Affiche : Hello interval, Dead interval,\n  Neighbor count, DR/BDR, Network type\n\nR1# debug ip ospf hello\n→ Temps réel : Hello envoyés et reçus\n\nR1# debug ip ospf adj\n→ Processus d'établissement d'adjacence\n\nR1# undebug all  (arrêter les debugs !)\n\nAttention : debug peut surcharger un routeur en prod !"}
+ ],
+ lab:{title:"Lab — Troubleshooting OSPF (bugs intentionnels)",badge:"cli",
+  obj:"Diagnostiquer et corriger 3 problèmes OSPF délibérément introduits.",
+  topo:"[R1]──[R2]──[R3]  OSPF area 0 avec erreurs intentionnelles",
+  steps:[
+   {t:"Introduire les erreurs",cmds:"! Erreur 1 : Hello timer différent sur R2\nR2(config)# interface gi0/0\nR2(config-if)# ip ospf hello-interval 5\n\n! Erreur 2 : Area incorrecte sur R3\nR3(config)# router ospf 1\nR3(config-router)# no network 10.0.2.0 0.0.0.3 area 0\nR3(config-router)# network 10.0.2.0 0.0.0.3 area 1"},
+   {t:"Diagnostic et correction",cmds:"! Diagnostic :\nR1# show ip ospf neighbor  (R2 en Init ? R3 absent ?)\nR2# show ip ospf interface gi0/0  (Hello interval = 5 ?)\nR3# show ip ospf  (area 1 visible ?)\n\n! Correction erreur 1 :\nR2(config-if)# no ip ospf hello-interval 5\n\n! Correction erreur 2 :\nR3(config-router)# no network 10.0.2.0 0.0.0.3 area 1\nR3(config-router)# network 10.0.2.0 0.0.0.3 area 0"}
+  ],
+  verify:"✓ Après correction : show ip ospf neighbor → FULL\n✓ show ip route ospf → toutes routes O visibles\n✓ Ping entre tous les routeurs : succès\n✓ Maîtrise des causes d'échec d'adjacence OSPF"}
+},
+{d:11,topic:"Security Fundamentals",ic:"🛡️",
+ sub:["Triade CIA (Confidentiality, Integrity, Availability)","Types d'attaques (DoS/DDoS, MitM, Spoofing, Phishing, Social Engineering)","Programme de sécurité","Vulnérabilités des mots de passe","Alternatives aux mots de passe (MFA, certificats, biométrie)"],
+ ex:[
+  {q:"Expliquez la triade CIA avec un exemple réseau pour chaque pilier.",ans:"Confidentiality (Confidentialité) :\nSeules les personnes autorisées accèdent aux données.\nEx: Chiffrement TLS pour les connexions HTTPS\n    VPN IPsec pour les données en transit\n\nIntegrity (Intégrité) :\nLes données ne sont pas modifiées sans autorisation.\nEx: HMAC/SHA sur les messages OSPF (auth)\n    Contrôle des ACLs pour éviter les modifications\n\nAvailability (Disponibilité) :\nSystèmes accessibles quand nécessaire.\nEx: Redondance (HSRP, EtherChannel)\n    Protection anti-DDoS, rate limiting"},
+  {q:"Quelle est la différence entre DoS et DDoS ?",ans:"DoS (Denial of Service) :\n- UNE seule source d'attaque\n- Facile à bloquer (bloquer l'IP source)\n- Ex: SYN flood depuis un PC attaquant\n\nDDoS (Distributed Denial of Service) :\n- MILLIERS de sources (botnet de machines compromises)\n- Très difficile à bloquer (trafic distribué)\n- Ex: Mirai botnet (1.1 Tbps d'attaque en 2016)\n- Mitigation: anycast, scrubbing centers, rate limiting"}
+ ],
+ lab:{title:"Lab — Hardening d'un routeur Cisco",badge:"cli",
+  obj:"Appliquer les bonnes pratiques de sécurité sur un routeur.",
+  topo:"[Admin PC]──SSH uniquement──[Router R1]\nObjectif : accès sécurisé, pas de Telnet",
+  steps:[
+   {t:"Sécurisation des accès et mots de passe",cmds:"R1(config)# security passwords min-length 10\nR1(config)# enable secret Str0ng#Pass2024\nR1(config)# service password-encryption\nR1(config)# login block-for 60 attempts 3 within 30\nR1(config)# banner motd #\nACCES AUTORISE UNIQUEMENT\nConnexion non autorisee = infraction\n#"},
+   {t:"SSH exclusif + timeouts",cmds:"R1(config)# ip domain-name secure.lab\nR1(config)# crypto key generate rsa modulus 2048\nR1(config)# username secadmin priv 15 secret Admin#2024\nR1(config)# line vty 0 15\nR1(config-line)# transport input ssh\nR1(config-line)# login local\nR1(config-line)# exec-timeout 3 0\nR1# show ip ssh"}
+  ],
+  verify:"✓ show ip ssh → SSH version 2.0, enabled\n✓ Telnet → Connection refused\n✓ SSH fonctionnel\n✓ 3 tentatives → blocked 60 secondes"}
+},
+{d:10,topic:"ACL Concepts",ic:"📜",
+ sub:["Rôle des ACLs (filtrage du trafic)","Wildcard masks","ACL Standard (1-99, 1300-1999) : filtre sur IP source uniquement","ACL Étendue (100-199, 2000-2699) : filtre sur src/dst/protocole/port","ACLs nommées","Deny implicite en fin d'ACL","Placement : Standard=près destination, Étendue=près source"],
+ ex:[
+  {q:"Calculez les wildcards :\n1. 192.168.1.0/24\n2. 10.0.0.0/8\n3. 172.16.0.0/12",ans:"Wildcard = 255.255.255.255 - masque\n\n1. /24 → masque 255.255.255.0\n   Wildcard : 0.0.0.255\n\n2. /8  → masque 255.0.0.0\n   Wildcard : 0.255.255.255\n\n3. /12 → masque 255.240.0.0\n   Wildcard : 0.15.255.255"},
+  {q:"Où placer une ACL Standard ? Étendue ?\nExpliquez pourquoi.",ans:"ACL STANDARD (filtre sur IP source seulement) :\n→ Placer près de la DESTINATION\nRaison : si placée près de la source, elle bloque\ntrop tôt et le trafic ne peut aller nulle part\n\nACL ÉTENDUE (filtre src/dst/protocole/port) :\n→ Placer près de la SOURCE\nRaison : bloquer le trafic indésirable dès que possible\navant qu'il traverse inutilement tout le réseau\n\nRègle mnémotechnique :\nStandard = loin de la source = près destination\nÉtendue  = près de la source"}
+ ],
+ lab:{title:"Lab — ACL Standard et Étendue",badge:"pt",
+  obj:"Créer et tester des ACLs pour contrôler l'accès réseau.",
+  topo:"[PC-Admin .5]──[R1]──[Serveur HTTP .100]\n[PC-User  .50]──[R1]  Port 80 et SSH 22",
+  steps:[
+   {t:"ACL Standard — bloquer PC-User",cmds:"! ACL Standard numérotée\nR1(config)# access-list 10 deny host 192.168.1.50\nR1(config)# access-list 10 permit any\n! Appliquer près de la destination (outbound)\nR1(config)# interface gi0/1\nR1(config-if)# ip access-group 10 out"},
+   {t:"ACL Étendue — autoriser HTTP seulement",cmds:"R1(config)# ip access-list extended WEB-ONLY\nR1(config-ext-nacl)# permit tcp 192.168.1.0 0.0.0.255 host 192.168.2.100 eq 80\nR1(config-ext-nacl)# permit tcp 192.168.1.0 0.0.0.255 host 192.168.2.100 eq 443\nR1(config-ext-nacl)# deny ip any any log\nR1(config)# interface gi0/0\nR1(config-if)# ip access-group WEB-ONLY in\nR1# show access-lists"}
+  ],
+  verify:"✓ PC-Admin → HTTP : autorisé\n✓ PC-User → serveur : bloqué (ACL 10)\n✓ Tout PC → SSH : bloqué (ACL étendue)\n✓ show access-lists → compteurs matches"}
+},
+{d:9,topic:"ACL Implementation",ic:"⚡",
+ sub:["Configuration ACL Standard IPv4","Configuration ACL Étendue IPv4","Troubleshooting ACLs","show access-lists et compteurs","debug ip packet"],
+ ex:[
+  {q:"Créez une ACL étendue nommée 'SECURE-WEB' :\n- Autoriser HTTP (80) et HTTPS (443) depuis 10.1.0.0/24 vers 172.16.1.100\n- SSH (22) autorisé seulement depuis 10.1.0.5\n- Bloquer tout le reste avec log",ans:"R1(config)# ip access-list extended SECURE-WEB\nR1(config-ext-nacl)# remark SSH admin seulement\nR1(config-ext-nacl)# permit tcp host 10.1.0.5 host 172.16.1.100 eq 22\nR1(config-ext-nacl)# remark HTTP et HTTPS\nR1(config-ext-nacl)# permit tcp 10.1.0.0 0.0.0.255 host 172.16.1.100 eq 80\nR1(config-ext-nacl)# permit tcp 10.1.0.0 0.0.0.255 host 172.16.1.100 eq 443\nR1(config-ext-nacl)# deny ip any any log\n! Appliquer près de la source\nR1(config)# interface gi0/0\nR1(config-if)# ip access-group SECURE-WEB in"},
+  {q:"Pourquoi le deny implicite pose-t-il problème ?\nComment le détecter ?",ans:"Problème du deny implicite :\nToute ACL Cisco se termine par 'deny any' INVISIBLE.\nSi on oublie un 'permit', le trafic légitime est bloqué\nSILENCIEUSEMENT sans message d'erreur.\n\nDétection :\nR1# show access-lists\n→ Voir les compteurs de matches\n→ Si deny implicite compte beaucoup = trafic bloqué\n\nSolution : ajouter 'deny ip any any log' visible\npour voir ce qui est bloqué dans les logs Syslog"}
+ ],
+ lab:{title:"Lab — ACLs nommées et troubleshooting",badge:"cli",
+  obj:"Implémenter une politique de sécurité et diagnostiquer un problème d'ACL.",
+  topo:"[LAN 10.1.0.0/24]──Gi0/0[R1]Gi0/1──[Serveurs 172.16.1.0/24]\nAdmin : 10.1.0.5 / Users : 10.1.0.x",
+  steps:[
+   {t:"Politique de sécurité via ACL",cmds:"R1(config)# ip access-list extended POLICY\nR1(config-ext-nacl)# permit tcp host 10.1.0.5 172.16.1.0 0.0.0.255 eq 22\nR1(config-ext-nacl)# deny tcp any any eq 22\nR1(config-ext-nacl)# permit tcp 10.1.0.0 0.0.0.255 172.16.1.0 0.0.0.255 eq 80\nR1(config-ext-nacl)# permit tcp 10.1.0.0 0.0.0.255 172.16.1.0 0.0.0.255 eq 443\nR1(config-ext-nacl)# deny ip any any log\nR1(config)# interface gi0/0\nR1(config-if)# ip access-group POLICY in"},
+   {t:"Vérification et debug",cmds:"R1# show access-lists POLICY\nR1# show ip interface gi0/0\n! Voir quelle ACL est appliquée\nR1# debug ip packet\n! Voir les paquets droppés\nR1# undebug all"}
+  ],
+  verify:"✓ Admin SSH : autorisé\n✓ User SSH : bloqué\n✓ HTTP/HTTPS depuis LAN : autorisé\n✓ show access-lists → compteurs incrementent"}
+},
+{d:8,topic:"NAT",ic:"🔁",
+ sub:["Concepts NAT (Inside/Outside, Local/Global)","Static NAT (1 à 1)","Dynamic NAT (pool d'IPs publiques)","PAT / NAT Overload (N:1 avec ports)","Configuration et vérification","Dépannage NAT"],
+ ex:[
+  {q:"Expliquez les 4 termes NAT avec un exemple concret :\nInside Local, Inside Global, Outside Local, Outside Global",ans:"Inside Local    : IP PRIVÉE du client interne\n                  Ex: 192.168.1.10 (IP du PC)\n\nInside Global   : IP PUBLIQUE qui représente le client\n                  Ex: 203.0.113.5 (IP NAT attribuée)\n\nOutside Local   : IP du serveur EXTERNE vue de l'intérieur\n                  Ex: 8.8.8.8\n\nOutside Global  : IP RÉELLE du serveur externe\n                  Ex: 8.8.8.8 (identique en général)\n\nFlux NAT : PC (192.168.1.10) → PAT → Internet (203.0.113.5:port)"},
+  {q:"Configurez PAT sur R1 :\n- Réseau interne : 192.168.1.0/24\n- Interface publique : Gi0/1 (203.0.113.1)",ans:"! Étape 1 : ACL pour définir les sources\nR1(config)# access-list 1 permit 192.168.1.0 0.0.0.255\n\n! Étape 2 : PAT via l'interface publique\nR1(config)# ip nat inside source list 1 interface gi0/1 overload\n\n! Étape 3 : Marquer les interfaces\nR1(config)# interface gi0/0\nR1(config-if)# ip nat inside\nR1(config)# interface gi0/1\nR1(config-if)# ip nat outside"}
+ ],
+ lab:{title:"Lab — PAT (NAT Overload) complet",badge:"cli",
+  obj:"Permettre à un LAN privé d'accéder à Internet via une seule IP publique.",
+  topo:"[PC1 192.168.1.10]──[S1]──Gi0/0[R1]Gi0/1──[Internet 8.8.8.8]\n[PC2 192.168.1.20]                203.0.113.1",
+  steps:[
+   {t:"Configuration PAT",cmds:"R1(config)# access-list 10 permit 192.168.1.0 0.0.0.255\nR1(config)# ip nat inside source list 10 interface gi0/1 overload\nR1(config)# interface gi0/0\nR1(config-if)# ip nat inside\nR1(config)# interface gi0/1\nR1(config-if)# ip nat outside"},
+   {t:"Vérification PAT",cmds:"R1# show ip nat translations\n! Voir : 192.168.1.x:port → 203.0.113.1:port\nR1# show ip nat statistics\n! Voir hits, misses, active translations\nR1# debug ip nat\nR1# undebug all"}
+  ],
+  verify:"✓ PC1 et PC2 pinguent 8.8.8.8 avec la même IP publique\n✓ show ip nat translations → 2 entrées avec ports différents\n✓ IP privées 192.168.1.x jamais visibles côté Internet\n✓ show ip nat statistics → hits incrementent"}
+},
+{d:7,topic:"WAN Concepts",ic:"🌍",
+ sub:["Technologies WAN (MPLS, Metro Ethernet, PPP, HDLC)","Options de connexion WAN","WAN moderne (SD-WAN, Internet VPN)","Connectivité Internet (Broadband, Cable, DSL, Fiber)","VPN : site-to-site et remote access"],
+ ex:[
+  {q:"Quelle est la différence entre MPLS et Internet pour une entreprise ?",ans:"MPLS :\n- Réseau PRIVÉ géré par l'opérateur\n- QoS garantie (SLA : latence, gigue, perte)\n- Routage via labels (très rapide)\n- Coût élevé\n- Idéal : VoIP, vidéoconférence inter-sites\n\nInternet :\n- Réseau PUBLIC, best-effort (pas de SLA)\n- Coût faible\n- Utiliser VPN IPsec pour sécurité\n- SD-WAN peut l'optimiser\n\nTendance actuelle : SD-WAN remplace progressivement MPLS"},
+  {q:"Qu'est-ce que SD-WAN et quel problème résout-il ?",ans:"SD-WAN (Software-Defined WAN) :\nCentralise la gestion WAN via un orchestrateur.\nUtilise PLUSIEURS liens simultanément :\n(MPLS + Internet + 4G/5G)\n\nProblèmes résolus :\n1. Coût : remplace MPLS cher par Internet peu cher\n2. Flexibilité : bascule si un lien tombe (auto)\n3. App-aware routing : VoIP sur MPLS, YouTube sur Internet\n4. Management centralisé : plus de config manuelle\n5. Visibilité : monitoring applicatif"}
+ ],
+ lab:{title:"Lab — PPP avec authentification CHAP",badge:"cli",
+  obj:"Configurer une liaison WAN série avec PPP et authentication CHAP.",
+  topo:"[R1]──Serial0/0/0──DCE/DTE──Serial0/0/0──[R2]\n     10.0.0.1/30                    10.0.0.2/30",
+  steps:[
+   {t:"Configuration PPP CHAP sur R1 et R2",cmds:"! R1 (côté DCE) :\nR1(config)# username R2 password CHAPsecret\nR1(config)# interface serial 0/0/0\nR1(config-if)# ip address 10.0.0.1 255.255.255.252\nR1(config-if)# encapsulation ppp\nR1(config-if)# ppp authentication chap\nR1(config-if)# clock rate 128000\nR1(config-if)# no shutdown\n! R2 (côté DTE) :\nR2(config)# username R1 password CHAPsecret\nR2(config)# interface serial 0/0/0\nR2(config-if)# ip address 10.0.0.2 255.255.255.252\nR2(config-if)# encapsulation ppp\nR2(config-if)# ppp authentication chap"},
+   {t:"Vérification",cmds:"R1# show interfaces serial 0/0/0\nR1# show ppp all\nR1# debug ppp authentication\nR1# undebug all"}
+  ],
+  verify:"✓ show interfaces serial → line protocol is up\n✓ LCP et CHAP négociés avec succès\n✓ R1 ping 10.0.0.2 : Reply\n✓ Mauvais password CHAP → interface reste down"}
+},
+{d:6,topic:"Network Management",ic:"📡",
+ sub:["CDP (Cisco Discovery Protocol) — propriétaire Cisco","LLDP (802.1AB) — standard IEEE ouvert","NTP (Network Time Protocol) — synchronisation horloge","Syslog — niveaux 0 à 7","SNMP v1/v2c/v3 — monitoring","NetFlow — analyse de trafic"],
+ ex:[
+  {q:"Pourquoi désactiver CDP sur les interfaces vers les utilisateurs ?\nComment le désactiver sélectivement ?",ans:"Problème de sécurité :\nCDP révèle des informations sensibles :\n- Version IOS (permet de cibler des vulnérabilités)\n- Modèle d'équipement\n- Adresses IP des interfaces\n- Capacités de l'appareil\n\nUn attaquant sur le réseau peut cartographier l'infra.\n\nDésactiver sur les ports access (vers utilisateurs) :\nS1(config)# interface fa0/1\nS1(config-if)# no cdp enable\n! Garder sur les ports uplink (pour le management)"},
+  {q:"Configurez NTP sur R1 avec le serveur 216.239.35.0 .\nComment vérifier la synchronisation ?",ans:"R1(config)# ntp server 216.239.35.0\n\n! (Optionnel) avec authentification :\nR1(config)# ntp authenticate\nR1(config)# ntp authentication-key 1 md5 NTPkey123\nR1(config)# ntp trusted-key 1\nR1(config)# ntp server 216.239.35.0 key 1\n\nVérification :\nR1# show ntp status\n  → Clock is synchronized (attendre 1-2 min)\nR1# show ntp associations\n  → * = synchronized, + = candidate\nR1# show clock"}
+ ],
+ lab:{title:"Lab — CDP, NTP et Syslog",badge:"cli",
+  obj:"Configurer et sécuriser CDP/LLDP, synchroniser NTP et centraliser les logs Syslog.",
+  topo:"[Switch S1]──[Router R1]──[NTP/Syslog Server 192.168.100.x]",
+  steps:[
+   {t:"CDP sécurisé et LLDP",cmds:"! Désactiver CDP sur ports access\nS1(config)# interface range fa0/1-20\nS1(config-if-range)# no cdp enable\n! Activer LLDP\nS1(config)# lldp run\n\nVérification :\nS1# show cdp neighbors\nS1# show lldp neighbors detail"},
+   {t:"NTP et Syslog sur R1",cmds:"! NTP\nR1(config)# ntp server 192.168.100.10\nR1# show ntp status\n\n! Syslog\nR1(config)# logging on\nR1(config)# logging host 192.168.100.20\nR1(config)# logging trap informational\nR1(config)# service timestamps log datetime msec\nR1# show logging"}
+  ],
+  verify:"✓ show ntp status → Clock is synchronized, stratum 2\n✓ show logging → messages envoyés au serveur\n✓ CDP désactivé sur ports Fa0/1-20\n✓ LLDP découvre les équipements voisins"}
+},
+{d:5,topic:"Network Design and Architecture",ic:"🏗️",
+ sub:["Two-Tier vs Three-Tier Campus Design","Rôles : Access / Distribution / Core","Spine-Leaf Architecture (datacentres)","WAN Design Considerations","Small Office Design"],
+ ex:[
+  {q:"Décrivez les 3 couches du modèle hiérarchique Cisco et le rôle de chacune.",ans:"ACCESS :\n- Connecte les utilisateurs finaux (PCs, phones, APs)\n- Port Security, PoE, VLANs access\n- Switches : Catalyst 2960, 9200\n\nDISTRIBUTION :\n- Agrège les switches d'accès\n- Routage inter-VLAN (SVIs), ACLs, QoS\n- Redondance (HSRP, EtherChannel)\n- Switches : Catalyst 4500, 9300\n\nCORE :\n- Backbone haute vitesse, faible latence\n- PAS de filtrage ni QoS → performance max\n- Switches : Nexus 7000, Catalyst 9500"},
+  {q:"Quelle est la différence entre Three-Tier et Spine-Leaf ?",ans:"Three-Tier (Core/Distribution/Access) :\n- Campus d'entreprise traditionnel\n- Trafic nord-sud (client → serveur)\n- Spanning Tree pour la redondance\n- Latence variable selon l'emplacement\n\nSpine-Leaf :\n- Datacentres modernes\n- Trafic est-ouest (serveur → serveur)\n- Chaque Leaf connecté à CHAQUE Spine\n- Latence prévisible et constante (2 sauts max)\n- Routage L3 (pas de STP)\n- Scalable : ajouter un Leaf = agrandir facilement"}
+ ],
+ lab:{title:"Lab — Design Three-Tier dans Packet Tracer",badge:"pt",
+  obj:"Construire une topologie Three-Tier et définir le plan d'adressage.",
+  topo:"CORE:   [C1]──────[C2]\nDIST:   [D1]──[D2]  [D3]──[D4]\nACCESS: [A1][A2]    [A3][A4]",
+  steps:[
+   {t:"Construction de la topologie",cmds:"1. Packet Tracer → New\n2. Ajouter :\n   - 2x Switch 3650 (Core : C1, C2)\n   - 2x Switch 3650 (Distribution : D1, D2)\n   - 4x Switch 2960 (Access : A1-A4)\n3. Câbler selon modèle Three-Tier\n4. Ajouter 2 PCs par switch Access"},
+   {t:"Plan d'adressage",cmds:"VLANs :\n  VLAN 10 : Data   → 192.168.10.0/24\n  VLAN 20 : Voice  → 192.168.20.0/24\n  VLAN 30 : Mgmt   → 192.168.30.0/24\n  VLAN 99 : Native → non routé\n\nLiens Core-Distribution : 10.0.x.x/30\nLiens Distribution-Access : trunk 802.1Q"}
+  ],
+  verify:"✓ Topologie visuellement correcte (Three-Tier)\n✓ Access switches connectés à 2 Distribution (redondance)\n✓ VLANs créés et documentés\n✓ Plan d'adressage sans chevauchement"}
+},
+{d:4,topic:"IP Services",ic:"🛠️",
+ sub:["QoS : Classification, Marking, Queuing, Policing, Shaping","DSCP Markings (EF=46, AF, CS)","Différence Policing vs Shaping","DHCP Relay (ip helper-address)","First Hop Redundancy : HSRP, VRRP, GLBP"],
+ ex:[
+  {q:"Quelle est la différence entre Policing et Shaping en QoS ?",ans:"POLICING (limitation stricte) :\n- Trafic dépasse le débit → DROP ou REMARK (re-marquage)\n- Pas de buffer → action immédiate\n- Utilisé côté INGRESS (trafic entrant)\n- Ex: FAI limite à 100 Mbps → surplus droppé\n\nSHAPING (lissage de trafic) :\n- Trafic dépasse le débit → mis en BUFFER (queue)\n- Envoyé progressivement pour respecter le débit\n- Utilisé côté EGRESS (trafic sortant)\n- Évite les drops mais ajoute de la latence\n- Ex: Adapter le débit sortant au SLA MPLS garanti"},
+  {q:"Configurez ip helper-address sur R1 Gi0/0.\nPourquoi est-ce nécessaire ?",ans:"Pourquoi : les broadcasts DHCP DISCOVER ne\nfranchissent pas les routeurs par défaut.\n→ Clients sur un sous-réseau différent du serveur DHCP\n  ne peuvent pas obtenir d'adresse.\n\nSolution : ip helper-address convertit le broadcast\nDHCP en unicast vers le serveur DHCP distant.\n\nR1(config)# interface gi0/0\nR1(config-if)# ip helper-address 192.168.100.10\n\nVérification :\nR1# show ip helper-address\nR1# debug ip dhcp server packet"}
+ ],
+ lab:{title:"Lab — DHCP Relay (ip helper-address)",badge:"cli",
+  obj:"Permettre à des clients d'un sous-réseau différent d'obtenir une IP d'un serveur DHCP distant.",
+  topo:"[Clients 192.168.1.0/24]──Gi0/0[R1]Gi0/1──[DHCP Srv 192.168.100.10]",
+  steps:[
+   {t:"Serveur DHCP sur R2 ou serveur dédié",cmds:"R2(config)# ip dhcp excluded-address 192.168.1.1 192.168.1.19\nR2(config)# ip dhcp pool REMOTE-LAN\nR2(dhcp-config)# network 192.168.1.0 255.255.255.0\nR2(dhcp-config)# default-router 192.168.1.1\nR2(dhcp-config)# dns-server 8.8.8.8"},
+   {t:"Relay sur R1",cmds:"R1(config)# interface gi0/0\nR1(config-if)# ip helper-address 192.168.100.10\n\nVérification :\nR1# show ip helper-address\nR2# show ip dhcp binding  (voir les baux accordés)\nR1# debug ip dhcp server packet"}
+  ],
+  verify:"✓ Client DHCP obtient IP 192.168.1.20+ ✓\n✓ show ip dhcp binding → client listé\n✓ Client ping gateway 192.168.1.1 : Reply\n✓ Sans helper-address → client timeout DHCP"}
+},
+{d:3,topic:"Cloud, Virtualization, and SDN",ic:"☁️",
+ sub:["Cloud Computing : IaaS / PaaS / SaaS","Modèles : Public / Privé / Hybride / Community","Hyperviseurs Type 1 (bare-metal) et Type 2 (hosted)","Infrastructure réseau virtuelle (vSwitch)","SDN Architecture : Control / Data / Management Plane","Cisco ACI et APIC"],
+ ex:[
+  {q:"Donnez un exemple concret pour IaaS, PaaS et SaaS.",ans:"IaaS (Infrastructure as a Service) :\nEx: AWS EC2, Azure VMs, Google Compute Engine\nTu gères l'OS et les apps. Provider gère le hardware.\n\nPaaS (Platform as a Service) :\nEx: AWS Elastic Beanstalk, Heroku, Google App Engine\nTu déploies ton code. Provider gère OS et runtime.\n\nSaaS (Software as a Service) :\nEx: Microsoft 365, Salesforce, Google Workspace\nTu utilises l'app directement. Provider gère tout."},
+  {q:"Quelle est la différence entre hyperviseur Type 1 et Type 2 ?",ans:"Type 1 (Bare-Metal) :\n- S'installe DIRECTEMENT sur le matériel\n- Pas d'OS hôte intermédiaire → très performant\n- Ex: VMware ESXi, Hyper-V, Citrix XenServer\n- Utilisé en PRODUCTION (datacentres)\n\nType 2 (Hosted) :\n- S'installe SUR un OS hôte (Windows/Linux/macOS)\n- L'OS hôte consomme des ressources → moins performant\n- Ex: VMware Workstation, VirtualBox, Parallels\n- Utilisé pour LABORATOIRE et développement"}
+ ],
+ lab:{title:"Lab — Concepts SDN et virtualisation",badge:"cli",
+  obj:"Identifier les 3 plans SDN et comprendre comment ils sont découplés.",
+  topo:"[Contrôleur SDN]──REST API──[vSwitch Open vSwitch]\n(Control Plane)           (Data Plane)",
+  steps:[
+   {t:"Les 3 plans SDN à identifier",cmds:"1. MANAGEMENT PLANE :\n   → SSH, SNMP, Syslog, NETCONF\n   → Monitoring et administration\n\n2. CONTROL PLANE :\n   → Décisions de routage (où envoyer les paquets)\n   → Dans SDN : CENTRALISÉ dans le contrôleur\n   → Protocoles : OSPF, BGP, OpenFlow\n\n3. DATA PLANE (Forwarding) :\n   → Forward les paquets en matériel (ASIC)\n   → Reste dans l'équipement réseau"},
+   {t:"Avantages du découplage SDN",cmds:"Dans un routeur TRADITIONNEL :\n→ Les 3 plans dans le même boîtier (couplés)\n→ Configuration manuelle, difficile à automatiser\n\nDans SDN :\n→ Control Plane découplé dans un contrôleur\n→ REST API pour programmer le réseau\n→ Automatisation et agilité\n→ Ex: Cisco DNA Center = orchestrateur SDN"}
+  ],
+  verify:"✓ Tu identifies les 3 plans SDN\n✓ Tu comprends IaaS/PaaS/SaaS avec exemples\n✓ Tu distingues Type 1 vs Type 2 hyperviseur\n✓ Tu expliques pourquoi SDN facilite l'automatisation"}
+},
+{d:2,topic:"SDA and Cisco DNA Center",ic:"🤖",
+ sub:["Software-Defined Access (SDA) — campus fabric","Cisco DNA Center — orchestration et assurance","Automatisation réseau","REST APIs (JSON/XML, méthodes HTTP)","YANG Models, NETCONF, RESTCONF","Ansible, Puppet, Chef — gestion de configuration"],
+ ex:[
+  {q:"Analysez cette réponse JSON d'une API Cisco DNA Center :\n{\"response\":{\"hostname\":\"R1\",\"managementIpAddress\":\"192.168.1.1\",\"platformId\":\"ISR4331\",\"softwareVersion\":\"17.3.1\"}}\n\nComment accéder à l'IP en Python ?",ans:"Les paires clé:valeur du JSON :\nhostname           : 'R1'\nmanagementIpAddress: '192.168.1.1'\nplatformId         : 'ISR4331' (routeur ISR 4000)\nsoftwareVersion    : '17.3.1'\n\nAccès en Python :\ndata = response.json()\nip = data['response']['managementIpAddress']\nprint(ip)  # → '192.168.1.1'"},
+  {q:"Quelle est la différence entre NETCONF et RESTCONF ?",ans:"NETCONF :\n- Transport : SSH (port 830)\n- Format : XML\n- Opérations : get, get-config, edit-config, commit\n- RFC 6241\n- Configuration complète de l'équipement\n\nRESTCONF :\n- Transport : HTTPS (port 443)\n- Format : JSON OU XML\n- Méthodes HTTP : GET, POST, PUT, PATCH, DELETE\n- RFC 8040\n- Plus simple (Postman, curl, Python requests)\n- Sous-ensemble des fonctionnalités NETCONF"}
+ ],
+ lab:{title:"Lab — API REST Cisco DevNet Sandbox",badge:"cli",
+  obj:"Utiliser Python pour interroger l'API REST de Cisco DNA Center.",
+  topo:"[Ton PC]──HTTPS──[Cisco DevNet Sandbox]\nhttps://sandboxdnac.cisco.com",
+  steps:[
+   {t:"Authentification JWT",cmds:"import requests\nimport json\n\nurl = 'https://sandboxdnac.cisco.com/dna/system/api/v1/auth/token'\nheaders = {'Content-Type': 'application/json'}\nauth = ('devnetuser', 'Cisco123!')\n\nresp = requests.post(url, headers=headers,\n                     auth=auth, verify=False)\ntoken = resp.json()['Token']\nprint('Token obtenu:', token[:30]+'...')"},
+   {t:"Lister les équipements",cmds:"headers = {\n  'X-Auth-Token': token,\n  'Content-Type': 'application/json'\n}\nurl2 = 'https://sandboxdnac.cisco.com/dna/intent/api/v1/network-device'\n\nresp2 = requests.get(url2, headers=headers, verify=False)\ndevices = resp2.json()['response']\nfor d in devices:\n    print(f\"{d['hostname']:20} {d['managementIpAddress']:15} {d['platformId']}\")"}
+  ],
+  verify:"✓ Token JWT obtenu\n✓ Liste des équipements affichée\n✓ Compréhension du flux : Auth → Token → API\n✓ Bonus: filtrer par platformId avec Python"}
+},
+{d:1,topic:"Exam Day Preparation",ic:"🏆",
+ sub:["Stratégie le jour de l'examen (120 min, ~100 questions)","Test-taking strategies","La veille de l'examen","Pendant l'examen","Après l'examen"],
+ ex:[
+  {q:"Quels sont les 6 domaines du CCNA 200-301 v1.1 et leurs pourcentages ?",ans:"Domaine 1 : Network Fundamentals        ~ 20%\n  (OSI, TCP/IP, Ethernet, IPv4, IPv6, Wireless)\n\nDomaine 2 : Network Access               ~ 20%\n  (VLANs, STP, EtherChannel, WLAN config)\n\nDomaine 3 : IP Connectivity              ~ 25%\n  (Routage, OSPF, routes statiques, inter-VLAN)\n\nDomaine 4 : IP Services                  ~ 10%\n  (NAT, NTP, DHCP, QoS, SNMP, Syslog)\n\nDomaine 5 : Security Fundamentals        ~ 15%\n  (ACLs, AAA, Port Security, VPN, WPA2/3)\n\nDomaine 6 : Automation & Programmability ~ 10%\n  (SDN, DNA Center, REST API, YANG, Ansible)"},
+  {q:"Quelle est la stratégie recommandée pour gérer le temps\ndurant l'examen CCNA (120 min, ~100 questions) ?",ans:"Calcul : 120 min / 100 questions = 72 secondes/question\n\n1ère PASSE (réponses sûres, 30-40s max/question) :\n→ Répondre rapidement aux questions connues\n→ MARQUER les incertaines pour plus tard\n→ Ne jamais bloquer > 1 minute sur une question\n\n2ème PASSE (questions marquées) :\n→ Utiliser le temps restant\n→ Éliminer les mauvaises réponses d'abord\n→ Faire confiance à son premier instinct\n\nRègles clés :\n→ Toujours répondre (pas de malus)\n→ Lire TOUTES les options avant de choisir\n→ Attention aux mots : 'SAUF', 'JAMAIS', 'TOUJOURS'"}
+ ],
+ lab:{title:"Lab — Simulation d'examen CCNA complet",badge:"pt",
+  obj:"Topologie intégrant tous les sujets des 31 jours. Objectif : tout configurer en 90 minutes.",
+  topo:"[PC-V10]─[S1]═trunk═[S2]─[PC-V20]\n              │\n         [R1 RoaS]──OSPF──[R2]──[PAT→Internet]\n              │\n          [WLC]──[AP]──[Laptop WiFi]\n     DHCP│NTP│ACL│Syslog",
+  steps:[
+   {t:"Checklist des configurations (90 minutes)",cmds:"□ S1, S2 : VLAN 10, 20, 99 (native) + trunk\n□ R1 : Router on a Stick (VLAN10: .1/24, VLAN20: .1/24)\n□ R1 : Serveur DHCP pour VLAN 10 et VLAN 20\n□ R1-R2 : OSPF area 0 (loopback router-id)\n□ R2 : PAT vers Internet (ip nat inside/outside)\n□ R1 : ACL — SSH admin seulement, bloquer Telnet\n□ R1 : NTP client synchronisé\n□ R1 : Syslog vers 192.168.1.100\n□ WLC : SSID CCNA-Exam, WPA2-PSK, bridge VLAN10\n□ Tout pingable depuis tout"},
+   {t:"Vérifications finales",cmds:"show vlan brief\nshow interfaces trunk\nshow ip route\nshow ip ospf neighbor\nshow ip nat translations\nshow access-lists\nshow ntp status\nshow standby brief\nshow ip dhcp binding\nshow etherchannel summary"}
+  ],
+  verify:"✓ VLAN isolation (VLAN10 ≠ VLAN20 sans R1)\n✓ DHCP : PCs obtiennent IP automatiquement\n✓ OSPF : R1 et R2 adjacents (FULL)\n✓ PAT : PC ping 8.8.8.8\n✓ ACL : SSH admin OK, Telnet bloqué\n✓ Laptop Wi-Fi sur VLAN 10\n\n🏆 Si tout fonctionne → tu es PRÊT pour l'examen !"}
+}
+];
+
+// ═══════════════════════ QUIZ ═══════════════════════
+const quiz=[
+{q:"(J28) Réseau 192.168.5.0/27 — Combien d'hôtes utilisables ?",opts:["14","30","62","126"],ans:1,exp:"/27 = 32 adresses. 32-2 = 30 hôtes utilisables."},
+{q:"(J25) Quel switch devient Root Bridge STP ?",opts:["Le plus grand Bridge ID","Le plus petit Bridge ID","Le premier démarré","Le plus de ports"],ans:1,exp:"Smallest Bridge ID (Priority + MAC) = Root Bridge. Priorité défaut = 32768."},
+{q:"(J26) Quelle encapsulation sur un trunk Cisco ?",opts:["ISL","802.1Q","802.3","VLAN-ID"],ans:1,exp:"802.1Q est le standard ouvert. ISL = ancien propriétaire Cisco, obsolète."},
+{q:"(J14) Adresse multicast OSPF pour tous les routeurs OSPF ?",opts:["224.0.0.1","224.0.0.5","224.0.0.6","224.0.0.9"],ans:1,exp:"224.0.0.5 = tous routeurs OSPF. 224.0.0.6 = DR/BDR. 224.0.0.9 = RIPv2."},
+{q:"(J23) Ordre correct du processus DHCP ?",opts:["Discover→Request→Offer→Ack","Offer→Discover→Request→Ack","Discover→Offer→Request→Ack","Request→Offer→Discover→Ack"],ans:2,exp:"DORA : Discover → Offer → Request → Acknowledge. Mémorise DORA !"},
+{q:"(J20) Que fait 'violation restrict' en Port Security ?",opts:["Éteint le port (err-disabled)","Drop silencieux","Drop + log + compteur","Permet toutes les MACs"],ans:2,exp:"Restrict = drop les MACs non autorisées + log + incrémente le compteur violations."},
+{q:"(J19) Distance administrative d'OSPF ?",opts:["90","100","110","120"],ans:2,exp:"EIGRP=90, OSPF=110, RIP=120. Plus petite AD = source plus fiable."},
+{q:"(J24) Protocole EtherChannel standard IEEE ouvert ?",opts:["PAgP","LACP","UDLD","STP"],ans:1,exp:"LACP = IEEE 802.3ad. PAgP = propriétaire Cisco. Multi-vendeur → utiliser LACP."},
+{q:"(J10) Où placer une ACL étendue ?",opts:["Près de la destination","N'importe où","Près de la source","Interface outside seulement"],ans:2,exp:"ACL étendue = près de la SOURCE (bloquer le plus tôt). ACL standard = près de la DESTINATION."},
+{q:"(J27) Préfixe des adresses IPv6 Link-Local ?",opts:["2001::/16","FC00::/7","FE80::/10","FF00::/8"],ans:2,exp:"FE80::/10 = Link-Local. Auto-configurées, non routables. FF00:: = Multicast."},
+{q:"(J8) Commande pour voir les traductions NAT actives ?",opts:["show ip route","show ip nat translations","show interfaces","show arp"],ans:1,exp:"'show ip nat translations' affiche les entrées NAT actives (Inside Local ↔ Inside Global)."},
+{q:"(J22) Standard Wi-Fi introduisant OFDMA (Wi-Fi 6) ?",opts:["802.11n","802.11ac","802.11ax","802.11g"],ans:2,exp:"802.11ax (Wi-Fi 6) = OFDMA + MU-MIMO 8x8 + BSS Coloring. Débit max 9.6 Gbps."},
+{q:"(J31) PDU de la couche 2 (Data Link) ?",opts:["Bit","Trame (Frame)","Paquet","Segment"],ans:1,exp:"Couche 2 = Trame/Frame. Couche 3 = Paquet. Couche 4 = Segment. Couche 1 = Bit."},
+{q:"(J9) Pourquoi toute ACL a-t-elle un 'deny any' implicite à la fin ?",opts:["Performance","Tout ce qui n'est pas autorisé est bloqué","Standard IEEE","Pour debugging"],ans:1,exp:"Le deny any implicite = politique de sécurité par défaut. Si tu oublies un permit → trafic bloqué silencieusement !"},
+{q:"(J13) Commande OSPF pour redistribuer la default route ?",opts:["default-information originate","redistribute static","ip route 0.0.0.0","network 0.0.0.0"],ans:0,exp:"default-information originate = redistribue 0.0.0.0/0 dans OSPF. Les voisins verront O*E2."},
+{q:"(J6) Niveau Syslog 'Warning' ?",opts:["Niveau 2","Niveau 3","Niveau 4","Niveau 5"],ans:2,exp:"0=Emergency,1=Alert,2=Critical,3=Error,4=Warning,5=Notice,6=Info,7=Debug."},
+{q:"(J16) Encapsulation requise sur une sous-interface Router-on-a-Stick ?",opts:["frame-relay","ppp","dot1q","hdlc"],ans:2,exp:"encapsulation dot1q VLAN_ID associe la sous-interface au VLAN du trunk. Ex: gi0/0.10 → encapsulation dot1q 10"},
+{q:"(J2) Outil de config management 'agentless' (sans agent) ?",opts:["Puppet","Chef","Ansible","CFEngine"],ans:2,exp:"Ansible = agentless (SSH/API, pas d'agent). Puppet et Chef nécessitent un agent."},
+{q:"(J15) AD d'une floating static route AD=200 vs OSPF AD=110 ?",opts:["OSPF gagne (110<200)","Floating static gagne","Les deux dans la table","Floating static si OSPF absent"],ans:0,exp:"OSPF (AD=110) < Floating static (AD=200) → OSPF préféré. Floating static = backup uniquement."},
+{q:"(J30) Comment un switch apprend-il les adresses MAC ?",opts:["Via CDP","En lisant l'adresse MAC SOURCE des trames reçues","Via RADIUS","Via Hellos"],ans:1,exp:"Le switch lit la MAC SOURCE de chaque trame reçue et l'associe au port d'arrivée dans la CAM table."}
+];
+
+// ═══════════════════════ AIDE-MÉMOIRE ═══════════════════════
+const reviews=[
+{t:"Subnetting /24→/30",b:`<span class="hl">/24</span> → 254 hôtes  255.255.255.0    WC: 0.0.0.255
+<span class="hl">/25</span> → 126 hôtes  255.255.255.128  WC: 0.0.0.127
+<span class="hl">/26</span> →  62 hôtes  255.255.255.192  WC: 0.0.0.63
+<span class="hl">/27</span> →  30 hôtes  255.255.255.224  WC: 0.0.0.31
+<span class="hl">/28</span> →  14 hôtes  255.255.255.240  WC: 0.0.0.15
+<span class="hl">/29</span> →   6 hôtes  255.255.255.248  WC: 0.0.0.7
+<span class="hl">/30</span> →   2 hôtes  255.255.255.252  WC: 0.0.0.3`},
+{t:"Distances administratives (J19)",b:`Connecté:       <span class="hl2">0</span>   EIGRP interne: <span class="hl2">90</span>
+Route statique: <span class="hl2">1</span>   OSPF:         <span class="hl2">110</span>
+EIGRP summary:  <span class="hl2">5</span>   RIP:          <span class="hl2">120</span>
+eBGP:          <span class="hl2">20</span>   EIGRP externe:<span class="hl2">170</span>
+                    iBGP:         <span class="hl2">200</span>   Non fiable: <span class="hl4">255</span>`},
+{t:"OSI — PDU et mnémotechnique (J31)",b:`<span class="hl">7</span> Application  → Data    → <span class="hl2">A</span>ll
+<span class="hl">6</span> Presentation → Data    → <span class="hl2">P</span>eople
+<span class="hl">5</span> Session      → Data    → <span class="hl2">S</span>eem
+<span class="hl">4</span> Transport    → Segment → <span class="hl2">T</span>o
+<span class="hl">3</span> Network      → Paquet  → <span class="hl2">N</span>eed
+<span class="hl">2</span> Data Link    → Trame   → <span class="hl2">D</span>ata
+<span class="hl">1</span> Physical     → Bit     → <span class="hl2">P</span>rocessing`},
+{t:"Ports TCP/UDP bien connus (J31)",b:`FTP: <span class="hl">20</span>/<span class="hl">21</span> TCP  SSH: <span class="hl">22</span> TCP   Telnet: <span class="hl">23</span> TCP
+SMTP: <span class="hl">25</span> TCP  DNS: <span class="hl">53</span> UDP/TCP DHCP: <span class="hl">67</span>/<span class="hl">68</span> UDP
+TFTP: <span class="hl">69</span> UDP  HTTP: <span class="hl">80</span> TCP   NTP: <span class="hl">123</span> UDP
+HTTPS:<span class="hl">443</span> TCP  SNMP:<span class="hl">161</span> UDP   Traps:<span class="hl">162</span> UDP`},
+{t:"OSPF Résumé (J14/13/12)",b:`AD:<span class="hl">110</span>  Protocol IP:<span class="hl">89</span>  Algo: SPF (Dijkstra)
+Multicast: <span class="hl">224.0.0.5</span> (all OSPF) | <span class="hl">224.0.0.6</span> (DR/BDR)
+Hello:<span class="hl">10s</span>  Dead:<span class="hl">40s</span>  (NBMA: 30s/120s)
+États: Down→Init→2Way→ExStart→Exchange→Loading→<span class="hl2">Full</span>
+LSA: <span class="hl2">1</span>=Router <span class="hl2">2</span>=Network <span class="hl2">3</span>=Summary <span class="hl3">5</span>=External
+DR: priorité la plus haute → Router-ID le plus grand`},
+{t:"STP États et rôles (J25)",b:`États: <span class="hl4">Blocking</span>→<span class="hl3">Listening</span>(15s)→<span class="hl3">Learning</span>(15s)→<span class="hl2">Forwarding</span>
+RSTP : <span class="hl4">Discarding</span>→<span class="hl3">Learning</span>→<span class="hl2">Forwarding</span> (< 1 seconde)
+Root port    : 1 par switch non-root
+Designated   : 1 par segment
+Blocked/Alt  : éliminé pour éviter les boucles
+PortFast     : skip Listen/Learn — JAMAIS vers un switch!`},
+{t:"Syslog severity (J6)",b:`<span class="hl4">0</span> Emergency  <span class="hl4">1</span> Alert    <span class="hl4">2</span> Critical  <span class="hl3">3</span> Error
+<span class="hl3">4</span> Warning    <span class="hl">5</span> Notice   <span class="hl2">6</span> Info      <span class="hl2">7</span> Debug
+Mnémo: Every Awesome Cisco Engineer Will Need Daily Practice`},
+{t:"WPA/WPA2/WPA3 (J22)",b:`         WPA         WPA2        WPA3
+Chiffr.  TKIP/RC4    AES-CCMP    AES-GCMP
+Auth PSK Oui         Oui         SAE(Dragonfly)
+802.1X   Oui         Oui         Oui
+PMF      Non         Optionnel   <span class="hl2">Obligatoire</span>
+Sécurité <span class="hl4">Vulnérable</span>  <span class="hl3">Correct</span>     <span class="hl2">Recommandé</span>`}
+];
+
+// ═══════════════════════ STATE ═══════════════════════
+let done=JSON.parse(localStorage.getItem('ccna_v4_done')||'[]');
+let qsState=JSON.parse(localStorage.getItem('ccna_v4_quiz')||'{"t":0,"c":0}');
+let totalQ=qsState.t, correctQ=qsState.c;
+let selDay=null, qList=[], qIdx=0;
+
+function save(){
+  localStorage.setItem('ccna_v4_done',JSON.stringify(done));
+  localStorage.setItem('ccna_v4_quiz',JSON.stringify({t:totalQ,c:correctQ}));
+}
+
+function updateStats(){
+  document.getElementById('s-done').textContent=done.length+'/31';
+  document.getElementById('s-score').textContent=totalQ>0?Math.round(correctQ/totalQ*100)+'%':'—';
+  document.getElementById('pf').style.width=Math.round(done.length/31*100)+'%';
+}
+
+// ═══════════════════════ PAGES ═══════════════════════
+function goPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+  if(p==='quiz'&&qList.length===0)startQuiz();
+  if(p==='review')renderReview();
+  if(p==='labs')renderAllLabs();
+}
+
+// ═══════════════════════ GRILLE ═══════════════════════
+function renderGrid(){
+  const g=document.getElementById('day-grid');
+  g.innerHTML='';
+  days.forEach(d=>{
+    const el=document.createElement('div');
+    el.className='dc'+(done.includes(d.d)?' done':'')+(selDay===d.d?' sel':'');
+    el.innerHTML='<div class="dic">'+d.ic+'</div><div class="dn">Jour '+d.d+'</div><div class="dt">'+d.topic+'</div>';
+    el.onclick=()=>selectDay(d.d);
+    g.appendChild(el);
+  });
+}
+
+// ═══════════════════════ DÉTAIL ═══════════════════════
+function selectDay(n){
+  selDay=n;
+  renderGrid();
+  const d=days.find(x=>x.d===n);
+  const isDone=done.includes(n);
+  document.getElementById('detail').style.display='block';
+  document.getElementById('d-title').textContent=d.ic+' Jour '+d.d+' — '+d.topic;
+  document.getElementById('d-pill').innerHTML=isDone
+    ?'<span class="pill yes">✓ Terminé</span>'
+    :'<span class="pill no">À faire</span>';
+  // rendre les panels
+  renderSubPanel(d);
+  renderExPanel(d,n);
+  renderLabPanel(d.lab);
+  // activer onglet théorie par défaut
+  switchTab('sub');
+  document.getElementById('d-actions').innerHTML=isDone
+    ?'<button class="btn" onclick="unmark('+n+')">Remettre à faire</button>'
+    :'<button class="btn btn-ok" onclick="mark('+n+')">✓ Marquer comme terminé</button>';
+}
+
+function switchTab(tab){
+  ['sub','ex','lab'].forEach(t=>{
+    const el=document.getElementById('panel-'+t);
+    if(el) el.classList.remove('show');
+    const tb=document.getElementById('tab-'+t);
+    if(tb) tb.classList.remove('active');
+  });
+  const el=document.getElementById('panel-'+tab);
+  if(el) el.classList.add('show');
+  const tb=document.getElementById('tab-'+tab);
+  if(tb) tb.classList.add('active');
+}
+
+function renderSubPanel(d){
+  const p=document.getElementById('panel-sub');
+  p.innerHTML='<ul class="stl">'+d.sub.map(s=>'<li><span class="dot"></span>'+s+'</li>').join('')+'</ul>';
+}
+
+function renderExPanel(d,n){
+  const p=document.getElementById('panel-ex');
+  if(!d.ex||d.ex.length===0){p.innerHTML='<p style="color:var(--text2);font-size:13px">Pas d\'exercice pour ce jour.</p>';return;}
+  let html='<div class="ex-block"><h4>✏️ Exercices — Jour '+n+'</h4>';
+  d.ex.forEach(function(q,i){
+    const qtext=q.q.replace(/\n/g,'<br>');
+    html+='<div class="ex-item">';
+    html+='<div class="ex-q"><strong>Q'+(i+1)+'.</strong> '+qtext+'</div>';
+    html+='<textarea class="ex-input" id="ei-'+n+'-'+i+'" placeholder="Votre réponse ici..." rows="3"></textarea>';
+    html+='<div class="ex-btns">';
+    html+='<button class="btn btn-amber" onclick="toggleAns('+n+','+i+')">Voir la réponse</button>';
+    html+='</div>';
+    html+='<div class="ex-ans" id="ea-'+n+'-'+i+'">'+q.ans.replace(/\n/g,'<br>')+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  p.innerHTML=html;
+}
+
+function toggleAns(n,i){
+  const el=document.getElementById('ea-'+n+'-'+i);
+  if(!el)return;
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+
+function renderLabPanel(lab){
+  const p=document.getElementById('panel-lab');
+  if(!lab){p.innerHTML='<p style="color:var(--text2);font-size:13px">Pas de lab pour ce jour.</p>';return;}
+  const badge=lab.badge==='pt'
+    ?'<span class="lb-badge lb-pt">Packet Tracer</span>'
+    :'<span class="lb-badge lb-cli">CLI IOS</span>';
+  let html='<div class="lab-wrap">';
+  html+='<div class="lab-title">🧪 '+lab.title+badge+'</div>';
+  html+='<div class="lab-obj">'+lab.obj+'</div>';
+  if(lab.topo) html+='<div class="lab-topo">'+escHtml(lab.topo)+'</div>';
+  lab.steps.forEach(function(s){
+    html+='<div class="lab-step-title">'+s.t+'</div>';
+    html+='<div class="cmd-block">'+escHtml(s.cmds)+'</div>';
+  });
+  html+='<div class="lab-verify">'+escHtml(lab.verify)+'</div>';
+  html+='</div>';
+  p.innerHTML=html;
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function mark(n){if(!done.includes(n)){done.push(n);save();}renderGrid();selectDay(n);updateStats();}
+function unmark(n){done=done.filter(x=>x!==n);save();renderGrid();selectDay(n);updateStats();}
+
+// ═══════════════════════ TOUS LES LABS ═══════════════════════
+function renderAllLabs(){
+  const c=document.getElementById('all-labs');
+  let html='';
+  days.forEach(function(d){
+    if(!d.lab)return;
+    const badge=d.lab.badge==='pt'
+      ?'<span class="lb-badge lb-pt">Packet Tracer</span>'
+      :'<span class="lb-badge lb-cli">CLI IOS</span>';
+    html+='<div class="card" style="margin-bottom:12px">';
+    html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">';
+    html+='<span style="font-size:18px">'+d.ic+'</span>';
+    html+='<strong style="font-size:13px">Jour '+d.d+' — '+d.topic+'</strong>';
+    html+=badge+'</div>';
+    html+='<div class="lab-wrap">';
+    html+='<div class="lab-title">🧪 '+d.lab.title+'</div>';
+    html+='<div class="lab-obj">'+d.lab.obj+'</div>';
+    if(d.lab.topo)html+='<div class="lab-topo">'+escHtml(d.lab.topo)+'</div>';
+    d.lab.steps.forEach(function(s){
+      html+='<div class="lab-step-title">'+s.t+'</div>';
+      html+='<div class="cmd-block">'+escHtml(s.cmds)+'</div>';
+    });
+    html+='<div class="lab-verify">'+escHtml(d.lab.verify)+'</div>';
+    html+='</div></div>';
+  });
+  c.innerHTML=html;
+}
+
+// ═══════════════════════ QUIZ ═══════════════════════
+function shuffle(a){return [...a].sort(()=>Math.random()-.5);}
+
+function startQuiz(){
+  qList=shuffle(quiz);
+  qIdx=0;
+  showQ();
+}
+
+function showQ(){
+  const box=document.getElementById('quiz-box');
+  if(qIdx>=qList.length){
+    const pct=Math.round(correctQ/qList.length*100);
+    box.innerHTML='<div class="score-end"><div class="score-big" style="color:'+(pct>=70?'var(--green)':'var(--amber)')+'">'+pct+'%</div><p style="color:var(--text2);font-size:13px;margin-top:8px">'+correctQ+' / '+qList.length+' correctes</p><div style="display:flex;justify-content:center;margin-top:1.5rem"><button class="btn btn-blue" onclick="startQuiz()">Recommencer →</button></div></div>';
+    return;
+  }
+  const q=qList[qIdx];
+  let html='<div class="qctr">Question '+(qIdx+1)+' / '+qList.length+'</div>';
+  html+='<div class="qtxt">'+q.q+'</div>';
+  html+='<div class="qopts">';
+  q.opts.forEach(function(o,i){
+    html+='<button class="qopt" id="qo'+i+'" onclick="ansQ('+i+')">'+o+'</button>';
+  });
+  html+='</div>';
+  html+='<div id="qfb" style="display:none"></div>';
+  html+='<div id="qnxt" style="margin-top:12px;display:none"><button class="btn btn-blue" onclick="nextQ()">Question suivante →</button></div>';
+  box.innerHTML=html;
+  box.dataset.ans=q.ans;
+  box.dataset.exp=q.exp;
+}
+
+function ansQ(i){
+  const box=document.getElementById('quiz-box');
+  const ans=parseInt(box.dataset.ans);
+  const exp=box.dataset.exp;
+  totalQ++;save();
+  document.querySelectorAll('.qopt').forEach(function(b){b.disabled=true;});
+  if(i===ans){
+    correctQ++;save();
+    document.getElementById('qo'+i).classList.add('correct');
+    const fb=document.getElementById('qfb');
+    fb.className='fb ok';fb.textContent='✓ Correct ! '+exp;fb.style.display='block';
+  } else {
+    document.getElementById('qo'+i).classList.add('wrong');
+    document.getElementById('qo'+ans).classList.add('correct');
+    const fb=document.getElementById('qfb');
+    fb.className='fb ko';fb.textContent='✗ Incorrect. '+exp;fb.style.display='block';
+  }
+  document.getElementById('qnxt').style.display='block';
+  updateStats();
+}
+
+function nextQ(){qIdx++;showQ();}
+
+// ═══════════════════════ AIDE-MÉMOIRE ═══════════════════════
+function renderReview(){
+  document.getElementById('review-body').innerHTML=reviews.map(function(r){
+    return '<div class="card" style="margin-bottom:12px"><div class="rtitle">'+r.t+'</div><div class="mono">'+r.b+'</div></div>';
+  }).join('');
+}
+
+// ═══════════════════════ INIT ═══════════════════════
+renderGrid();
+updateStats();
+</script>
+</body>
+</html>
